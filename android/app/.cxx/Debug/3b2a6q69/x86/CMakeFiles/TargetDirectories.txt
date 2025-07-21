@@ -1,0 +1,2 @@
+D:/bexova academy/Designing-studio/android/app/.cxx/Debug/3b2a6q69/x86/CMakeFiles/edit_cache.dir
+D:/bexova academy/Designing-studio/android/app/.cxx/Debug/3b2a6q69/x86/CMakeFiles/rebuild_cache.dir
