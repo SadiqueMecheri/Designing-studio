@@ -1,9 +1,16 @@
+import 'dart:developer';
+
 import 'package:designingstudio/authentication/registration.dart';
 import 'package:designingstudio/contrains.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:provider/provider.dart';
+
+import '../dashboard/dashboard.dart';
+import '../provider/commonviewmodel.dart';
+import '../session/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({super.key});
@@ -16,6 +23,9 @@ class _LoginScreenState extends State<LoginScreen> {
   String? fullPhoneNumber;
 
   String? countrycode;
+
+  CommonViewModel? vm;
+  bool isloading = false;
 
   @override
   void initState() {
@@ -32,6 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    vm = Provider.of<CommonViewModel>(context);
     return WillPopScope(
       onWillPop: () async {
         SystemNavigator.pop();
@@ -159,25 +170,70 @@ class _LoginScreenState extends State<LoginScreen> {
             Positioned(
               bottom: 20,
               right: 20,
-              child: MaterialButton(
-                height: 50,
-                minWidth: 50,
-                color: primaycolor,
-                shape: const CircleBorder(),
-                elevation: 4,
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) {
-                      return RegistrationScreen();
-                    },
-                  ));
-                },
-                child: const Icon(
-                  Icons.keyboard_arrow_right_outlined,
-                  color: Colors.black,
-                  size: 24,
-                ),
-              ),
+              child: isloading
+                  ? CircularProgressIndicator()
+                  : MaterialButton(
+                      height: 50,
+                      minWidth: 50,
+                      color: primaycolor,
+                      shape: const CircleBorder(),
+                      elevation: 4,
+                      onPressed: () {
+                        if (fullPhoneNumber == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Please enter mobile number'),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+
+                          return;
+                        }
+                        setState(() {
+                          isloading = true;
+                        });
+
+                        vm!
+                            .checklogin(
+                          fullPhoneNumber!,
+                        )
+                            .then((value) {
+                          setState(() {
+                            isloading = false;
+                          });
+                  
+                          if (vm!.responsedata.success == 1) {
+                            log("registration succuss");
+                            Store.setLoggedIn("yes");
+                            Store.setUsername(fullPhoneNumber.toString());
+                            Store.setname(vm!.responsedata.name.toString());
+                            Store.setUserid(vm!.responsedata.userid.toString());
+
+                            Navigator.pushReplacement(context,
+                                MaterialPageRoute(
+                              builder: (context) {
+                                return Dashboard(
+                                  selectIndex: 0,
+                                );
+                              },
+                            ));
+                          } else {
+                            // log("registration failed");
+                            Navigator.push(context, MaterialPageRoute(
+                              builder: (context) {
+                                return RegistrationScreen(
+                                    mobileno: fullPhoneNumber);
+                              },
+                            ));
+                          }
+                        });
+                      },
+                      child: const Icon(
+                        Icons.keyboard_arrow_right_outlined,
+                        color: Colors.black,
+                        size: 24,
+                      ),
+                    ),
             )
           ],
         ),

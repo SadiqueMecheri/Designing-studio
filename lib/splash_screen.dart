@@ -5,6 +5,9 @@ import 'package:designingstudio/contrains.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'dashboard/dashboard.dart';
+import 'session/shared_preferences.dart';
+
 class SplashScreen extends StatefulWidget {
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -21,14 +24,39 @@ class _MyHomePageState extends State<SplashScreen> {
         statusBarBrightness: Brightness.light, // For iOS
       ),
     );
+
     super.initState();
-    Timer(
-      Duration(seconds: 3),
-      () => Navigator.pushReplacement(
+    _initializeApp();
+  }
+
+  Future<void> _initializeApp() async {
+    // Add a small delay to show the splash screen
+    await Future.delayed(const Duration(milliseconds: 1500));
+
+    // Check session and navigate accordingly
+    await _checkSession();
+  }
+
+  Future<void> _checkSession() async {
+    String? isLoggedIn = await Store.getLoggedIn();
+
+    if (!mounted) return;
+
+    if (isLoggedIn == 'yes') {
+      Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => LoginScreen()),
-      ),
-    );
+        MaterialPageRoute(
+          builder: (context) => Dashboard(selectIndex: 0),
+        ),
+      );
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LoginScreen(),
+        ),
+      );
+    }
   }
 
   @override

@@ -3,15 +3,23 @@ import 'package:designingstudio/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
+
+import '../provider/commonviewmodel.dart';
+import '../session/shared_preferences.dart';
 
 class RegistrationScreen extends StatefulWidget {
-  const RegistrationScreen({super.key});
+  final String? mobileno;
+  const RegistrationScreen({super.key, required this.mobileno});
 
   @override
   State<RegistrationScreen> createState() => _RegistrationScreenState();
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
+  CommonViewModel? vm;
+  bool isloading = false;
+
   @override
   void initState() {
     // Yellow status bar for splash screen
@@ -28,6 +36,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   TextEditingController _nameController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    vm = Provider.of<CommonViewModel>(context);
     return Scaffold(
       backgroundColor: backgroundColor,
       body: SafeArea(
@@ -140,42 +149,83 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         color: Colors.white,
         child: Padding(
           padding: const EdgeInsets.all(15.0),
-          child: InkWell(
-            borderRadius: BorderRadius.circular(20),
-            onTap: () {
-              // Navigator.push(context, MaterialPageRoute(
-              //   builder: (context) {
-              //     return Dashboard(selectIndex: 0);
-              //   },
-              // ));
-            },
-            child: Container(
-                height: 50,
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: primaycolor),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Icon(
-                        Icons.keyboard_arrow_right,
-                        color: Colors.transparent,
-                      ),
-                      Text(
-                        "Register",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: getbigFontSize(context),
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Icon(Icons.keyboard_arrow_right)
-                    ],
-                  ),
-                )),
-          ),
+          child: isloading
+              ? CircularProgressIndicator()
+              : InkWell(
+                  borderRadius: BorderRadius.circular(20),
+                  onTap: () {
+                    if (_nameController.text.trim().isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Please enter your name'),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+
+                      return;
+                    }
+
+                    setState(() {
+                      isloading = true;
+                    });
+
+                    vm!
+                        .registration(
+                            widget.mobileno.toString(), _nameController.text)
+                        .then((value) {
+                      setState(() {
+                        isloading = false;
+                      });
+
+                      if (vm!.responsedata.success == 1) {
+                        Store.setLoggedIn("yes");
+                        Store.setUsername(widget.mobileno.toString());
+                        Store.setname(_nameController.text.trim());
+                        Store.setUserid(vm!.responsedata.userid.toString());
+
+                        Navigator.pushReplacement(context, MaterialPageRoute(
+                          builder: (context) {
+                            return Dashboard(selectIndex: 0);
+                          },
+                        ));
+                      } else {
+                        // log("registration failed");
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Registration failed'),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                      }
+                    });
+                  },
+                  child: Container(
+                      height: 50,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: primaycolor),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Icon(
+                              Icons.keyboard_arrow_right,
+                              color: Colors.transparent,
+                            ),
+                            Text(
+                              "Register",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: getbigFontSize(context),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Icon(Icons.keyboard_arrow_right)
+                          ],
+                        ),
+                      )),
+                ),
         ),
       ),
     );
