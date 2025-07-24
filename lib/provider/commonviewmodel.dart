@@ -4,6 +4,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 
+import '../model/allcourseModel.dart';
+import '../model/my_unit_only.dart';
 import '../model/responsemodel.dart';
 import '../webservice/webservice.dart';
 
@@ -37,40 +39,40 @@ class CommonViewModel extends ChangeNotifier {
   }
 
   // //fetchallcourse
-  // late Map<String, dynamic> allcourse;
-  // bool fetchallcourseloading = false;
+  late Map<String, dynamic> allcourse;
+  bool fetchallcourseloading = false;
 
-  // late List<CourseDetailModel> allcourselist;
-  // int? from;
-  //  int? apple;
-  // Future<Map<String, dynamic>> fetchallcourse() async {
-  //   fetchallcourseloading = true;
+  late List<CourseMMOdel> allcourselist;
+  int? from;
+   int? apple;
+  Future<Map<String, dynamic>> fetchallcourse() async {
+    fetchallcourseloading = true;
 
-  //   allcourse = await Webservice().fetchallcourse();
-  //   allcourselist = allcourse['allcoursedata'];
-  //   log("allcourselist length ====== ${allcourselist.length}");
-  //   from = allcourse['from'];
-  //     apple = allcourse['apple'];
-  //   fetchallcourseloading = false;
-  //   notifyListeners();
-  //   return allcourse;
-  // }
+    allcourse = await Webservice().fetchallcourse();
+    allcourselist = allcourse['allcoursedata'];
+    log("allcourselist length ====== ${allcourselist.length}");
+    from = allcourse['from'];
+      apple = allcourse['apple'];
+    fetchallcourseloading = false;
+    notifyListeners();
+    return allcourse;
+  }
 
   // //fetchmycourse
-  // late Map<String, dynamic> mycourse;
-  // bool fetchmycourseloading = false;
+  late Map<String, dynamic> mycourse;
+  bool fetchmycourseloading = false;
 
-  // late List<CourseDetailModel> mycourselist;
-  // Future<Map<String, dynamic>> fetchmycourse() async {
-  //   fetchmycourseloading = true;
+  late List<CourseMMOdel> mycourselist;
+  Future<Map<String, dynamic>> fetchmycourse() async {
+    fetchmycourseloading = true;
 
-  //   mycourse = await Webservice().fetchmycourse();
-  //   mycourselist = mycourse['allcoursedata'];
-  //   //log("mycourselist length ====== ${mycourselist.length}");
-  //   fetchmycourseloading = false;
-  //   notifyListeners();
-  //   return mycourse;
-  // }
+    mycourse = await Webservice().fetchmycourse();
+    mycourselist = mycourse['allcoursedata'];
+    //log("mycourselist length ====== ${mycourselist.length}");
+    fetchmycourseloading = false;
+    notifyListeners();
+    return mycourse;
+  }
 
   // //fetchcoursesubjects
   // late Map<String, dynamic> coursesubjects;
@@ -115,18 +117,18 @@ class CommonViewModel extends ChangeNotifier {
 
 
   //  //fetchmycourse
-  // late Map<String, dynamic> myuni;
-  // bool fetchmyunionlyloading = false;
+  late Map<String, dynamic> myuni;
+  bool fetchmyunionlyloading = false;
 
-  // late List<Uni> myunitonlylist;
-  // Future<Map<String, dynamic>> fetchmyunitonly(int subjid) async {
-  //   fetchmyunionlyloading = true;
+  late List<UnitRe> myunitonlylist;
+  Future<Map<String, dynamic>> fetchmyunitonly(int courseid,int batchid) async {
+    fetchmyunionlyloading = true;
 
-  //   myuni = await Webservice().fetchmyunitonly(subjid);
-  //   myunitonlylist = myuni['allcoursedata'];
-  //   log("mycourselist length ====== ${myunitonlylist.length}");
-  //   fetchmyunionlyloading = false;
-  //   notifyListeners();
-  //   return myuni;
-  // }
+    myuni = await Webservice().fetchmyunitonly(courseid,batchid);
+    myunitonlylist = myuni['allcoursedata'];
+    log("mycourselist length ====== ${myunitonlylist.length}");
+    fetchmyunionlyloading = false;
+    notifyListeners();
+    return myuni;
+  }
 }

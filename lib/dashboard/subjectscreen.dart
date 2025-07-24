@@ -2,54 +2,53 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 import '../provider/commonviewmodel.dart';
-import '../session/shared_preferences.dart';
+import 'videoplayermobile.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class SubjectScreen extends StatefulWidget {
+  final int courseid, batchid;
+  final String coursename;
+  const SubjectScreen(
+      {super.key,
+      required this.courseid,
+      required this.batchid,
+      required this.coursename});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<SubjectScreen> createState() => _CourseScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _CourseScreenState extends State<SubjectScreen> {
   CommonViewModel? vm;
-  String? name;
 
   @override
   void initState() {
     vm = Provider.of<CommonViewModel>(context, listen: false);
-    vm!.fetchallcourse();
-    loaddata();
+    vm!.fetchmyunitonly(widget.courseid, widget.batchid);
     super.initState();
-  }
-
-  loaddata() async {
-    name = await Store.getname();
-
-    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     vm = Provider.of<CommonViewModel>(context);
+
     return Scaffold(
       body: Column(
         children: [
           Center(
-            child: Text("Home"),
+            child: Text("Subject Screen"),
           ),
-          Text(name ?? "Loading"),
+          Text(widget.coursename),
           SingleChildScrollView(child:
               Consumer<CommonViewModel>(builder: (context, courses, child) {
-            if (courses.fetchallcourseloading == true) {
+            if (courses.fetchmyunionlyloading == true) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
             } else {
-              return courses.allcourselist.length == 0
+              return courses.myunitonlylist.length == 0
                   ? const Center(
                       child: Text(
-                      "No course Available",
+                      "No Units found",
                       style: TextStyle(fontSize: 15, color: Colors.black),
                     ))
                   : Padding(
@@ -60,9 +59,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           mainAxisSpacing: 10,
                           crossAxisSpacing: 10,
                           children: List.generate(
-                            courses.allcourselist.length,
+                            courses.myunitonlylist.length,
                             (index) {
-                              final coursedata = courses.allcourselist[index];
+                              final coursedata = courses.myunitonlylist[index];
                               return Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15),
@@ -74,28 +73,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 /// color: Colors.black,
                                 child: Column(
                                   children: [
-                                    ClipRRect(
-                                      borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(15),
-                                          topRight: Radius.circular(15)),
-                                      child: FadeInImage.assetNetwork(
-                                        placeholder:
-                                            'assets/images/greyimage.jpg', // Your GIF file in assets
-                                        image:
-                                            coursedata.courseimage.toString(),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                    // Flexible(
-                                    //   child: Container(
-                                    //     decoration: BoxDecoration(
-                                    //         color: Colors.grey,
-                                    //         image: DecorationImage(
-                                    //             image: NetworkImage(
-                                    //                 coursedata.image.toString()),
-                                    //             fit: BoxFit.fill)),
-                                    //   ),
-                                    // ),
                                     Padding(
                                       padding: const EdgeInsets.all(8),
                                       child: Column(
@@ -103,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         //     CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            coursedata.coursename.toString(),
+                                            coursedata.title.toString(),
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
                                             style: const TextStyle(
@@ -118,18 +95,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                               Flexible(
                                                 child: InkWell(
                                                   onTap: () {
-                                                    // Navigator.push(
-                                                    //     context,
-                                                    //     MaterialPageRoute(
-                                                    //   builder:
-                                                    //       (context) {
-                                                    //     return mysubjectonly(
-                                                    //       courseid:
-                                                    //           coursedata
-                                                    //               .id!,
-                                                    //     );
-                                                    //   },
-                                                    // ));
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                      builder:
+                                                          (context) {
+                                                        return VideoPlayerPage(
+                                                          videoUrl:
+                                                              coursedata
+                                                                  .ytlink!,
+                                                                  videoTitle:    coursedata
+                                                                  .title!,
+                                                                  videoDescription:coursedata
+                                                                  .description!,
+                                                                  youtubeurl:coursedata
+                                                                  .ytlink!,
+                                                        );
+                                                      },
+                                                    ));
                                                   },
                                                   child: Container(
                                                     width:

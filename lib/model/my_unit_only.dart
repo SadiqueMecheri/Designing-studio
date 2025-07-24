@@ -1,72 +1,73 @@
 // To parse this JSON data, do
 //
-//     final unitOnly = unitOnlyFromJson(jsonString);
+//     final unitResponse = unitResponseFromJson(jsonString);
 
 import 'dart:convert';
 
-UnitOnly unitOnlyFromJson(String str) => UnitOnly.fromJson(json.decode(str));
+UnitResponse unitResponseFromJson(String str) => UnitResponse.fromJson(json.decode(str));
 
-String unitOnlyToJson(UnitOnly data) => json.encode(data.toJson());
+String unitResponseToJson(UnitResponse data) => json.encode(data.toJson());
 
-class UnitOnly {
-  int success;
-  List<Uni> unilist;
+class UnitResponse {
+    int? success;
+    List<UnitRe>? uni;
 
-  UnitOnly({
-    required this.success,
-    required this.unilist,
-  });
+    UnitResponse({
+        this.success,
+        this.uni,
+    });
 
-  factory UnitOnly.fromJson(Map<String, dynamic> json) => UnitOnly(
+    factory UnitResponse.fromJson(Map<String, dynamic> json) => UnitResponse(
         success: json["success"],
-        unilist: List<Uni>.from(json["data"].map((x) => Uni.fromJson(x))),
-      );
+        uni: json["message"] == null ? [] : List<UnitRe>.from(json["message"]!.map((x) => UnitRe.fromJson(x))),
+    );
 
-  Map<String, dynamic> toJson() => {
+    Map<String, dynamic> toJson() => {
         "success": success,
-        "data": List<dynamic>.from(unilist.map((x) => x.toJson())),
-      };
+        "message": uni == null ? [] : List<dynamic>.from(uni!.map((x) => x.toJson())),
+    };
 }
 
-class Uni {
-  int id;
-  int subjectid;
-  String unitname;
-  String videolink;
-  String description;
-  String youtubeurl;
-  String thumbnail;
-  int courseid;
+class UnitRe {
+    int? id;
+    int? courseId;
+    String? title;
+    String? description;
+    String? ytlink;
+    String? thumburl;
+    int? seqnceNo;
+    int? isactive;
 
-  Uni({
-    required this.id,
-    required this.subjectid,
-    required this.unitname,
-    required this.videolink,
-    required this.description,
-    required this.thumbnail,
-    required this.youtubeurl,
-    required this.courseid,
-  });
+    UnitRe({
+        this.id,
+        this.courseId,
+        this.title,
+        this.description,
+        this.ytlink,
+        this.thumburl,
+        this.seqnceNo,
+        this.isactive,
+    });
 
-  factory Uni.fromJson(Map<String, dynamic> json) => Uni(
+    factory UnitRe.fromJson(Map<String, dynamic> json) => UnitRe(
         id: json["id"],
-        subjectid: json["subjectid"],
-        unitname: json["unitname"],
-        videolink: json["videolink"],
+        courseId: json["course_id"],
+        title: json["title"],
         description: json["description"],
-        thumbnail: json["thumbnail"],
-        youtubeurl: json["youtubelink"] == null ? "" : json["youtubelink"],
-        courseid: json["courseid"],
-      );
+        ytlink: json["ytlink"],
+        thumburl: json["thumburl"],
+        seqnceNo: json["seqnce_no"],
+        isactive: json["isactive"],
+    );
 
-  Map<String, dynamic> toJson() => {
+    Map<String, dynamic> toJson() => {
         "id": id,
-        "subjectid": subjectid,
-        "unitname": unitname,
-        "videolink": videolink,
+        "course_id": courseId,
+        "title": title,
         "description": description,
-        "thumbnail": thumbnail,
-        "courseid": courseid,
-      };
+        "ytlink": ytlink,
+        "thumburl": thumburl,
+        "seqnce_no": seqnceNo,
+        "isactive": isactive,
+    };
 }

@@ -6,8 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
+import '../model/allcourseModel.dart';
+import '../model/my_unit_only.dart';
 import '../model/responsemodel.dart';
 import '../provider/commonviewmodel.dart';
+import '../session/shared_preferences.dart';
 
 class Webservice {
   final String baseurl = "https://admin.bexova.com/api/users/";
@@ -108,86 +111,74 @@ class Webservice {
   //     throw Exception('Failed to load fetchallcourse');
   //   }
   // }
-  // Future<Map<String, dynamic>> fetchallcourse() async {
-  //   var result3;
+  Future<Map<String, dynamic>> fetchallcourse() async {
+    var result3;
 
-  //   final response = await http.get(
-  //     Uri.parse("${baseurl}getallcourse"),
-  //     headers: {
-  //       'Content-type': 'application/json',
-  //     },
-  //   );
-  //   log("respons fetchallcourse === ${response.body}");
-  //   final responseDatad = json.decode(response.body);
-  //   final decryptedResponse = decryptData(responseDatad['data']);
-  //   if (response.statusCode == 200) {
-  //     final Map<String, dynamic> responseData = jsonDecode(decryptedResponse);
-  //     CourseModel authUser = CourseModel.fromJson(responseData);
-  //     //  log("courselist ===== " + authUser.courseDetailModel!.length.toString());
-  //     result3 = {
-  //       'status': true,
-  //       'message': 'successful',
-  //       'allcoursedata': authUser.courseDetailModel,
-  //       'from': authUser.from,
-  //       'apple': authUser.apple,
-  //     };
-  //   } else {
-  //     result3 = {
-  //       'status': false,
-  //       'message': json.decode(decryptedResponse)['error']
-  //     };
-  //   }
-  //   return result3;
-  // }
+    final response = await http.get(
+      Uri.parse("${baseurl}getcourse"),
+      headers: {
+        'Content-type': 'application/json',
+      },
+    );
+    log("respons fetchallcourse === ${response.body}");
+    final responseDatad = json.decode(response.body);
+   
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = jsonDecode(response.body);
+      Courseresponse authUser = Courseresponse.fromJson(responseData);
+      //  log("courselist ===== " + authUser.courseDetailModel!.length.toString());
+      result3 = {
+        'status': true,
+        'message': 'successful',
+        'allcoursedata': authUser.message,
+      //  'from': authUser.from,
+        //'apple': authUser.apple,
+      };
+    } else {
+      result3 = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return result3;
+  }
 
-  // //get my course
-  // // Future<CourseModel> fetchmycourse() async {
-  // //   String? username = await Store.getUsername();
-  // //   final response = await http.post(Uri.parse("${baseurl}getmycourse"),
-  // //       body: {"mobile_no": username.toString()});
+  
+  Future<Map<String, dynamic>> fetchmycourse() async {
+    var result3;
+    String? username = await Store.getUserid();
+    log("username ====== " + username.toString());
+    Map<String, dynamic> data = {"userid":int.tryParse(username!)};
 
-  // //   if (response.statusCode == 200) {
-  // //     return CourseModel.fromJson(
-  // //         jsonDecode(response.body) as Map<String, dynamic>);
-  // //   } else {
-  // //     throw Exception('Failed to load fetchmycourse');
-  // //   }
-  // // }
-  // Future<Map<String, dynamic>> fetchmycourse() async {
-  //   var result3;
-  //   String? username = await Store.getUsername();
-  //   log("username ====== " + username.toString());
-  //   Map<String, dynamic> data = {"mobile_no": username.toString()};
+    final response = await http.post(
+      Uri.parse(
+        "${baseurl}getmycourse",
+      ),
+      body: jsonEncode(data),
+      headers: {
+        'Content-type': 'application/json',
+      },
+    );
+    log("respons fetchallcourse === ${response.body}");
+    final responseDatad = json.decode(response.body);
 
-  //   final response = await http.post(
-  //     Uri.parse(
-  //       "${baseurl}getmycourse",
-  //     ),
-  //     body: jsonEncode(data),
-  //     headers: {
-  //       'Content-type': 'application/json',
-  //     },
-  //   );
-  //   log("respons fetchallcourse === ${response.body}");
-  //   final responseDatad = json.decode(response.body);
-  //   final decryptedResponse = decryptData(responseDatad['data']);
-  //   if (response.statusCode == 200) {
-  //     final Map<String, dynamic> responseData = jsonDecode(decryptedResponse);
-  //     CourseModel authUser = CourseModel.fromJson(responseData);
-  //     //  log("courselist ===== " + authUser.courseDetailModel!.length.toString());
-  //     result3 = {
-  //       'status': true,
-  //       'message': 'successful',
-  //       'allcoursedata': authUser.courseDetailModel,
-  //     };
-  //   } else {
-  //     result3 = {
-  //       'status': false,
-  //       'message': json.decode(decryptedResponse)['error']
-  //     };
-  //   }
-  //   return result3;
-  // }
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = jsonDecode(response.body);
+      Courseresponse authUser = Courseresponse.fromJson(responseData);
+      //  log("courselist ===== " + authUser.courseDetailModel!.length.toString());
+      result3 = {
+        'status': true,
+        'message': 'successful',
+        'allcoursedata': authUser.message,
+      };
+    } else {
+      result3 = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return result3;
+  }
 
   // //get course subjects
   // Future<Map<String, dynamic>> fetchcoursesubjects(int courseid) async {
@@ -260,38 +251,37 @@ class Webservice {
   //   return result3;
   // }
 
-  // Future<Map<String, dynamic>> fetchmyunitonly(int subjid) async {
-  //   var result3;
+  Future<Map<String, dynamic>> fetchmyunitonly(int courseid,int batchid) async {
+    var result3;
 
-  //   Map<String, dynamic> data = {"subjectid": subjid};
+    Map<String, dynamic> data = {"courseid": courseid,"batchid":batchid};
 
-  //   final response = await http.post(
-  //     Uri.parse(
-  //       "${baseurl}getunit",
-  //     ),
-  //     body: jsonEncode(data),
-  //     headers: {
-  //       'Content-type': 'application/json',
-  //     },
-  //   );
-  //   final responseDatad = json.decode(response.body);
-  //   final decryptedResponse = decryptData(responseDatad['data']);
-  //   log("respons fetchallcourse === ${response.body}");
-  //   if (response.statusCode == 200) {
-  //     final Map<String, dynamic> responseData = jsonDecode(decryptedResponse);
-  //     UnitOnly authUser = UnitOnly.fromJson(responseData);
-  //     //  log("courselist ===== " + authUser.courseDetailModel!.length.toString());
-  //     result3 = {
-  //       'status': true,
-  //       'message': 'successful',
-  //       'allcoursedata': authUser.unilist,
-  //     };
-  //   } else {
-  //     result3 = {
-  //       'status': false,
-  //       'message': json.decode(decryptedResponse)['error']
-  //     };
-  //   }
-  //   return result3;
-  // }
+    final response = await http.post(
+      Uri.parse(
+        "${baseurl}getunit",
+      ),
+      body: jsonEncode(data),
+      headers: {
+        'Content-type': 'application/json',
+      },
+    );
+
+    log("respons fetchallcourse === ${response.body}");
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = jsonDecode(response.body);
+      UnitResponse authUser = UnitResponse.fromJson(responseData);
+      //  log("courselist ===== " + authUser.courseDetailModel!.length.toString());
+      result3 = {
+        'status': true,
+        'message': 'successful',
+        'allcoursedata': authUser.uni,
+      };
+    } else {
+      result3 = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return result3;
+  }
 }
