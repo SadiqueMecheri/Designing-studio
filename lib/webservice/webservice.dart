@@ -284,4 +284,49 @@ class Webservice {
     }
     return result3;
   }
+
+
+
+
+
+  Future<Map<String, dynamic>> adminlogin(String username,String password,) async {
+    var result3;
+
+
+    Map<String, dynamic> data = {
+      'username': username,
+       'password': password,
+      
+    };
+
+    final response = await http.post(
+      Uri.parse("${baseurl}ownerlogin"),
+      body: jsonEncode(data),
+      headers: {
+        'Content-type': 'application/json',
+      },
+    );
+    log("respons registration===${response.body}");
+    final responseData = json.decode(response.body);
+  
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = jsonDecode(response.body);
+      CheckLogResp authUser = CheckLogResp.fromJson(responseData);
+
+      result3 = {
+        'status': true,
+        'message': 'successful',
+        'responsedata': authUser
+      };
+    } else {
+      result3 = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return result3;
+  }
+
+
 }

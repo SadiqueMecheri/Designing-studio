@@ -131,4 +131,16 @@ class CommonViewModel extends ChangeNotifier {
     notifyListeners();
     return myuni;
   }
+
+
+
+    Future<Map<String, dynamic>> adminlogin(String username,String password) async {
+    registrationloading = true;
+    notifyListeners();
+    reg = await Webservice().adminlogin( username,password);
+    responsedata = reg['responsedata'];
+    registrationloading = false;
+    notifyListeners();
+    return reg;
+  }
 }

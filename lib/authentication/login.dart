@@ -8,6 +8,7 @@ import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:provider/provider.dart';
 
+import '../admin/loginpageadmin.dart';
 import '../dashboard/dashboard.dart';
 import '../provider/commonviewmodel.dart';
 import '../session/shared_preferences.dart';
@@ -157,6 +158,23 @@ class _LoginScreenState extends State<LoginScreen> {
                                 countrycode = phone.countryCode;
                               },
                             ),
+                            const SizedBox(height: 30),
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => LoginPageAdmin()),
+                                );
+                              },
+                              child: Text(
+                                "Is admin ?",
+                                style: TextStyle(
+                                  fontSize: getNormalFontSize(context),
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -201,7 +219,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           setState(() {
                             isloading = false;
                           });
-                  
+
                           if (vm!.responsedata.success == 1) {
                             log("registration succuss");
                             Store.setLoggedIn("yes");
