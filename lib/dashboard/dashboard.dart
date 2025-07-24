@@ -16,6 +16,7 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   int currentIndex = 0;
+  DateTime? currentBackPressTime;
   @override
   void initState() {
     currentIndex = widget.selectIndex;
@@ -41,221 +42,109 @@ class _DashboardState extends State<Dashboard> {
     });
   }
 
+  Future<bool> _onWillPop() async {
+    if (currentIndex != 0) {
+      setState(() {
+        currentIndex = 0;
+      });
+      return false;
+    }
+
+    DateTime now = DateTime.now();
+    if (currentBackPressTime == null ||
+        now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
+      currentBackPressTime = now;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Press back again to exit'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return false;
+    }
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      body: pages[currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-          onTap: OnTapped,
-          backgroundColor: Colors.white,
-          iconSize: 18,
-          selectedItemColor: const Color.fromRGBO(0, 0, 0, 1),
-          unselectedItemColor: Colors.grey,
-          currentIndex: currentIndex,
-          selectedFontSize: 12,
-          unselectedFontSize: 10,
-          items: <BottomNavigationBarItem>[
-            currentIndex == 0
-                ? BottomNavigationBarItem(
-                    icon: Image.asset(
-                      'assets/images/home2.png',
-                      height: 24,
-                      width: 24,
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        backgroundColor: backgroundColor,
+        body: pages[currentIndex],
+        bottomNavigationBar: BottomNavigationBar(
+            onTap: OnTapped,
+            backgroundColor: Colors.white,
+            iconSize: 18,
+            selectedItemColor: const Color.fromRGBO(0, 0, 0, 1),
+            unselectedItemColor: Colors.grey,
+            currentIndex: currentIndex,
+            selectedFontSize: 12,
+            unselectedFontSize: 10,
+            items: <BottomNavigationBarItem>[
+              currentIndex == 0
+                  ? BottomNavigationBarItem(
+                      icon: Image.asset(
+                        'assets/images/home2.png',
+                        height: 24,
+                        width: 24,
+                      ),
+                      label: "Home",
+                      tooltip: "Home",
+                    )
+                  : BottomNavigationBarItem(
+                      icon: Image.asset(
+                        'assets/images/home1.png',
+                        color: Colors.grey,
+                        height: 24,
+                        width: 24,
+                      ),
+                      label: "Home",
+                      tooltip: "Home",
                     ),
-                    label: "Home",
-                    tooltip: "Home",
-                  )
-                : BottomNavigationBarItem(
-                    icon: Image.asset(
-                      'assets/images/home1.png',
-                      color: Colors.grey,
-                      height: 24,
-                      width: 24,
+              currentIndex == 1
+                  ? BottomNavigationBarItem(
+                      icon: Image.asset(
+                        'assets/images/course2.png',
+                        height: 24,
+                        width: 24,
+                      ),
+                      label: "Course",
+                      tooltip: "Course",
+                    )
+                  : BottomNavigationBarItem(
+                      icon: Image.asset(
+                        'assets/images/course1.png',
+                        color: Colors.grey,
+                        height: 24,
+                        width: 24,
+                      ),
+                      label: "Course",
+                      tooltip: "Course",
                     ),
-                    label: "Home",
-                    tooltip: "Home",
-                  ),
-            currentIndex == 1
-                ? BottomNavigationBarItem(
-                    icon: Image.asset(
-                      'assets/images/course2.png',
-                      height: 24,
-                      width: 24,
+              currentIndex == 2
+                  ? BottomNavigationBarItem(
+                      icon: Image.asset(
+                        'assets/images/profile3.png',
+                        // color: primaycolor,
+                        height: 24,
+                        width: 24,
+                      ),
+                      label: "Profile",
+                      tooltip: "Profile",
+                    )
+                  : BottomNavigationBarItem(
+                      icon: Image.asset(
+                        'assets/images/profile2.png',
+                        color: Colors.grey,
+                        height: 24,
+                        width: 24,
+                      ),
+                      label: "Profile",
+                      tooltip: "Profile",
                     ),
-                    label: "Course",
-                    tooltip: "Course",
-                  )
-                : BottomNavigationBarItem(
-                    icon: Image.asset(
-                      'assets/images/course1.png',
-                      color: Colors.grey,
-                      height: 24,
-                      width: 24,
-                    ),
-                    label: "Course",
-                    tooltip: "Course",
-                  ),
-            currentIndex == 2
-                ? BottomNavigationBarItem(
-                    icon: Image.asset(
-                      'assets/images/profile3.png',
-                      // color: primaycolor,
-                      height: 24,
-                      width: 24,
-                    ),
-                    label: "Profile",
-                    tooltip: "Profile",
-                  )
-                : BottomNavigationBarItem(
-                    icon: Image.asset(
-                      'assets/images/profile2.png',
-                      color: Colors.grey,
-                      height: 24,
-                      width: 24,
-                    ),
-                    label: "Profile",
-                    tooltip: "Profile",
-                  ),
-            // BottomNavigationBarItem(
-            //     icon: Icon(Icons.home), label: "Home", tooltip: "Home"),
-            // BottomNavigationBarItem(
-            //     icon: Icon(Icons.search), label: "Search", tooltip: "Search"),
-            // BottomNavigationBarItem(
-            //     icon: Icon(Icons.settings),
-            //     label: "Settings",
-            //     tooltip: "Settings"),
-          ]),
-      // body: SafeArea(
-      //   child: Stack(
-      //     alignment: AlignmentDirectional.bottomCenter,
-      //     children: [
-      //       currentIndex == 0
-      //           ? const HomeScreen()
-      //           : currentIndex == 1
-      //               ? CourseScreen()
-      //               : const ProfileScreen(),
-      //       Positioned(
-      //         bottom: 30,
-      //         child: Container(
-      //           height: 65,
-      //           width: MediaQuery.of(context).size.width / 1.1,
-      //           decoration: BoxDecoration(
-      //             borderRadius: BorderRadius.circular(15),
-      //             color: primaycolor,
-      //           ),
-      //           child: Row(
-      //             mainAxisAlignment: MainAxisAlignment.spaceAround,
-      //             children: [
-      //               InkWell(
-      //                 onTap: () {
-      //                   setState(() {
-      //                     currentIndex = 0;
-      //                   });
-      //                 },
-      //                 child: Column(
-      //                   mainAxisAlignment: MainAxisAlignment.center,
-      //                   children: [
-      //                     currentIndex == 0
-      //                         ? Image.asset(
-      //                             "assets/images/home2.png",
-      //                             height: 25,
-      //                             width: 25,
-      //                           )
-      //                         : Image.asset(
-      //                             "assets/images/home1.png",
-      //                             height: 25,
-      //                             width: 25,
-      //                           ),
-      //                     const SizedBox(
-      //                       height: 5,
-      //                     ),
-      //                     currentIndex == 0
-      //                         ? CircleAvatar(
-      //                             radius: 3,
-      //                             backgroundColor: Colors.black,
-      //                           )
-      //                         : const SizedBox(
-      //                             height: 0,
-      //                           )
-      //                   ],
-      //                 ),
-      //               ),
-      //               InkWell(
-      //                 onTap: () {
-      //                   setState(() {
-      //                     currentIndex = 1;
-      //                   });
-      //                 },
-      //                 child: Column(
-      //                   mainAxisAlignment: MainAxisAlignment.center,
-      //                   children: [
-      //                     currentIndex == 1
-      //                         ? Image.asset(
-      //                             "assets/images/course2.png",
-      //                             height: 25,
-      //                             width: 25,
-      //                           )
-      //                         : Image.asset(
-      //                             "assets/images/course1.png",
-      //                             height: 25,
-      //                             width: 25,
-      //                           ),
-      //                     const SizedBox(
-      //                       height: 5,
-      //                     ),
-      //                     currentIndex == 1
-      //                         ? CircleAvatar(
-      //                             radius: 3,
-      //                             backgroundColor: Colors.black,
-      //                           )
-      //                         : const SizedBox(
-      //                             height: 0,
-      //                           )
-      //                   ],
-      //                 ),
-      //               ),
-      //               InkWell(
-      //                 onTap: () {
-      //                   setState(() {
-      //                     currentIndex = 2;
-      //                   });
-      //                 },
-      //                 child: Column(
-      //                   mainAxisAlignment: MainAxisAlignment.center,
-      //                   children: [
-      //                     currentIndex == 2
-      //                         ? Image.asset(
-      //                             "assets/images/profile1.png",
-      //                             height: 25,
-      //                             width: 25,
-      //                           )
-      //                         : Image.asset(
-      //                             "assets/images/profile2.png",
-      //                             height: 25,
-      //                             width: 25,
-      //                           ),
-      //                     const SizedBox(
-      //                       height: 5,
-      //                     ),
-      //                     currentIndex == 2
-      //                         ? CircleAvatar(
-      //                             radius: 3,
-      //                             backgroundColor: Colors.black,
-      //                           )
-      //                         : const SizedBox(
-      //                             height: 0,
-      //                           )
-      //                   ],
-      //                 ),
-      //               ),
-      //             ],
-      //           ),
-      //         ),
-      //       )
-      //     ],
-      //   ),
-      // ),
+            ]),
+      ),
     );
   }
 }

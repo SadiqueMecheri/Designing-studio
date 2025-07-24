@@ -1,10 +1,10 @@
 import 'package:designingstudio/contrains.dart';
-import 'package:designingstudio/dashboard/course_screen.dart';
-import 'package:designingstudio/dashboard/home_screen.dart';
-import 'package:designingstudio/dashboard/profile_screen.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 
+import '../authentication/login.dart';
+import '../session/shared_preferences.dart';
 import 'addadmission.dart';
 import 'admincourseviewpage.dart';
 import 'batchview.dart';
@@ -26,214 +26,197 @@ class _DashboardState extends State<AdminDashboard> {
     super.initState();
   }
 
+  void OnTapped(int index) {
+    if (index == 4) {
+      // Logout button index
+      _showLogoutDialog();
+    } else {
+      setState(() {
+        currentIndex = index;
+      });
+    }
+  }
+
+  Future<void> _showLogoutDialog() async {
+    bool? shouldLogout = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: Text(
+            'Confirm Logout',
+            style: TextStyle(fontFamily: 'Poppins', fontSize: 14),
+          ),
+          content: Text(
+            'Are you sure you want to logout?',
+            style: TextStyle(fontFamily: 'Poppins', fontSize: 12),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'Cancel',
+                style: TextStyle(fontFamily: 'Poppins', fontSize: 12),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ),
+            TextButton(
+              child: Text(
+                'Logout',
+                style: TextStyle(fontFamily: 'Poppins', fontSize: 12),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            ),
+          ],
+        );
+      },
+    );
+
+    if (shouldLogout == true) {
+      // Perform logout action here
+      print('User confirmed logout');
+
+      await Store.clear();
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LoginScreen(),
+        ),
+      );
+      // Add your logout logic (e.g., clearing session, navigating to login screen)
+    }
+  }
+
+  final List<Widget> pages = [
+    AdminCourseView(),
+    viewadmissions(),
+    addadmissions(),
+    batchview(),
+    Container()
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgroundColor,
-      body: SafeArea(
-        child: Stack(
-          alignment: AlignmentDirectional.bottomCenter,
-          children: [
+      body: pages[currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+          onTap: OnTapped,
+          backgroundColor: Colors.white,
+          iconSize: 18,
+          selectedItemColor: const Color.fromRGBO(0, 0, 0, 1),
+          unselectedItemColor: Colors.grey,
+          currentIndex: currentIndex,
+          selectedFontSize: 12,
+          unselectedFontSize: 10,
+          items: <BottomNavigationBarItem>[
             currentIndex == 0
-                ? const AdminCourseView()
-                : currentIndex == 1
-                    ? viewadmissions()
-                    :  currentIndex == 2?
-                    addadmissions()
-                    : 
-                    batchview(),
-                    
-                    
-            Positioned(
-              bottom: 30,
-              child: Container(
-                height: 65,
-                width: MediaQuery.of(context).size.width / 1.1,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: primaycolor,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          currentIndex = 0;
-                        });
-                      },
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          currentIndex == 0
-                              ? Image.asset(
-                                  "assets/images/home2.png",
-                                  height: 25,
-                                  width: 25,
-                                )
-                              : Image.asset(
-                                  "assets/images/home1.png",
-                                  height: 25,
-                                  width: 25,
-                                ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          currentIndex == 0
-                              ? CircleAvatar(
-                                  radius: 3,
-                                  backgroundColor: Colors.black,
-                                )
-                              : const SizedBox(
-                                  height: 0,
-                                )
-                        ],
-                      ),
+                ? BottomNavigationBarItem(
+                    icon: Image.asset(
+                      'assets/images/courseadmin1.png',
+                      height: 24,
+                      width: 24,
                     ),
-
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          currentIndex = 1;
-                        });
-                      },
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          currentIndex == 1
-                              ? Image.asset(
-                                  "assets/images/course2.png",
-                                  height: 25,
-                                  width: 25,
-                                )
-                              : Image.asset(
-                                  "assets/images/course1.png",
-                                  height: 25,
-                                  width: 25,
-                                ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          currentIndex == 1
-                              ? CircleAvatar(
-                                  radius: 3,
-                                  backgroundColor: Colors.black,
-                                )
-                              : const SizedBox(
-                                  height: 0,
-                                )
-                        ],
-                      ),
+                    label: "Course",
+                    tooltip: "Course",
+                  )
+                : BottomNavigationBarItem(
+                    icon: Image.asset(
+                      'assets/images/courseadmin0.png',
+                      color: Colors.grey,
+                      height: 24,
+                      width: 24,
                     ),
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          currentIndex = 2;
-                        });
-                      },
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          currentIndex == 2
-                              ? Image.asset(
-                                  "assets/images/profile1.png",
-                                  height: 25,
-                                  width: 25,
-                                )
-                              : Image.asset(
-                                  "assets/images/profile2.png",
-                                  height: 25,
-                                  width: 25,
-                                ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          currentIndex == 2
-                              ? CircleAvatar(
-                                  radius: 3,
-                                  backgroundColor: Colors.black,
-                                )
-                              : const SizedBox(
-                                  height: 0,
-                                )
-                        ],
-                      ),
+                    label: "Course",
+                    tooltip: "Course",
+                  ),
+            currentIndex == 1
+                ? BottomNavigationBarItem(
+                    icon: Image.asset(
+                      'assets/images/viewadm1.png',
+                      height: 24,
+                      width: 24,
                     ),
-                     InkWell(
-                      onTap: () {
-                        setState(() {
-                          currentIndex = 3;
-                        });
-                      },
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          currentIndex == 3
-                              ? Image.asset(
-                                  "assets/images/home2.png",
-                                  height: 25,
-                                  width: 25,
-                                )
-                              : Image.asset(
-                                  "assets/images/home1.png",
-                                  height: 25,
-                                  width: 25,
-                                ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          currentIndex ==3
-                              ? CircleAvatar(
-                                  radius: 3,
-                                  backgroundColor: Colors.black,
-                                )
-                              : const SizedBox(
-                                  height: 0,
-                                )
-                        ],
-                      ),
+                    label: "View Adm",
+                    tooltip: "View Adm",
+                  )
+                : BottomNavigationBarItem(
+                    icon: Image.asset(
+                      'assets/images/viewadm0.png',
+                      color: Colors.grey,
+                      height: 24,
+                      width: 24,
                     ),
-                     InkWell(
-                      onTap: () {
-                        setState(() {
-                          currentIndex =4;
-                        });
-                      },
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          currentIndex ==4
-                              ? Image.asset(
-                                  "assets/images/home2.png",
-                                  height: 25,
-                                  width: 25,
-                                )
-                              : Image.asset(
-                                  "assets/images/home1.png",
-                                  height: 25,
-                                  width: 25,
-                                ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          currentIndex ==4
-                              ? CircleAvatar(
-                                  radius: 3,
-                                  backgroundColor: Colors.black,
-                                )
-                              : const SizedBox(
-                                  height: 0,
-                                )
-                        ],
-                      ),
+                    label: "View Adm",
+                    tooltip: "View Adm",
+                  ),
+            currentIndex == 2
+                ? BottomNavigationBarItem(
+                    icon: Image.asset(
+                      'assets/images/addadm1.png',
+                      // color: primaycolor,
+                      height: 24,
+                      width: 24,
                     ),
-                  ],
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
+                    label: "Add Adm",
+                    tooltip: "Add Adm",
+                  )
+                : BottomNavigationBarItem(
+                    icon: Image.asset(
+                      'assets/images/addadm0.png',
+                      color: Colors.grey,
+                      height: 24,
+                      width: 24,
+                    ),
+                    label: "Add Adm",
+                    tooltip: "Add Adm",
+                  ),
+            currentIndex == 3
+                ? BottomNavigationBarItem(
+                    icon: Image.asset(
+                      'assets/images/batch1.png',
+                      // color: primaycolor,
+                      height: 24,
+                      width: 24,
+                    ),
+                    label: "Batch",
+                    tooltip: "Batch",
+                  )
+                : BottomNavigationBarItem(
+                    icon: Image.asset(
+                      'assets/images/batch0.png',
+                      color: Colors.grey,
+                      height: 24,
+                      width: 24,
+                    ),
+                    label: "Batch",
+                    tooltip: "Batch",
+                  ),
+            currentIndex == 4
+                ? BottomNavigationBarItem(
+                    icon: Image.asset(
+                      'assets/images/logout1.png',
+                      // color: primaycolor,
+                      height: 24,
+                      width: 24,
+                    ),
+                    label: "Batch",
+                    tooltip: "Batch",
+                  )
+                : BottomNavigationBarItem(
+                    icon: Image.asset(
+                      'assets/images/logout0.png',
+                      color: Colors.grey,
+                      height: 24,
+                      width: 24,
+                    ),
+                    label: "Batch",
+                    tooltip: "Batch",
+                  ),
+          ]),
     );
   }
 }

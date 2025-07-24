@@ -1,9 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:designingstudio/contrains.dart';
+import 'package:designingstudio/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 import '../provider/commonviewmodel.dart';
 import '../session/shared_preferences.dart';
+import 'profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -70,7 +73,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       radius: 20,
                       backgroundColor: Colors.black,
                       child: IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(context, MaterialPageRoute(
+                              builder: (context) {
+                                return Dashboard(
+                                  selectIndex: 2,
+                                );
+                              },
+                            ));
+                          },
                           icon: Icon(
                             Icons.person_2_rounded,
                             color: primaycolor,
@@ -134,7 +145,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             "No course Available",
                             style: TextStyle(fontSize: 15, color: Colors.black),
                           ))
-                        : StaggeredGrid.count(
+                        : 
+                        
+                        
+                        StaggeredGrid.count(
                             crossAxisCount: 2,
                             mainAxisSpacing: 10,
                             crossAxisSpacing: 10,
@@ -148,15 +162,34 @@ class _HomeScreenState extends State<HomeScreen> {
                                     padding: const EdgeInsets.all(10.0),
                                     child: Column(
                                       children: [
+                                        // ClipRRect(
+                                        //   borderRadius:
+                                        //       BorderRadius.circular(15),
+                                        //   child: FadeInImage.assetNetwork(
+                                        //     placeholder:
+                                        //         'assets/images/gif.gif', // Your GIF file in assets
+                                        //     image: coursedata.courseimage
+                                        //         .toString(),
+                                        //     fit: BoxFit.cover,
+                                        //   ),
+                                        // ),
                                         ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(15),
-                                          child: FadeInImage.assetNetwork(
-                                            placeholder:
-                                                'assets/images/gif.gif', // Your GIF file in assets
-                                            image: coursedata.courseimage
+                                          child: CachedNetworkImage(
+                                            imageUrl: coursedata.courseimage
                                                 .toString(),
+                                            placeholder: (context, url) =>
+                                                Image.asset(
+                                                    'assets/images/gif.gif',
+                                                    fit: BoxFit.cover),
+                                            fadeInDuration: Duration(
+                                                milliseconds:
+                                                    300), // Optional fade-in effect
                                             fit: BoxFit.cover,
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    Icon(Icons.error),
                                           ),
                                         ),
                                         SizedBox(

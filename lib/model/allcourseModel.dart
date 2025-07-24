@@ -37,6 +37,8 @@ class CourseMMOdel {
     String? note;
     int? isactive;
     int? batchid;
+DateTime? startdate;
+
 
     CourseMMOdel({
         this.id,
@@ -47,6 +49,7 @@ class CourseMMOdel {
         this.note,
         this.isactive,
         this.batchid,
+           this.startdate,
     });
 
     factory CourseMMOdel.fromJson(Map<String, dynamic> json) => CourseMMOdel(
@@ -58,6 +61,7 @@ class CourseMMOdel {
         note: json["note"],
         isactive: json["isactive"],
         batchid: json["batchid"],
+        startdate: json["startdate"] != null ? DateTime.parse(json["startdate"]) : null,
     );
 
     Map<String, dynamic> toJson() => {

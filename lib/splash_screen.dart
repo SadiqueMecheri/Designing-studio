@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:designingstudio/authentication/login.dart';
 import 'package:designingstudio/contrains.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'admin/admindashboard.dart';
 import 'dashboard/dashboard.dart';
 import 'session/shared_preferences.dart';
 
@@ -39,6 +41,7 @@ class _MyHomePageState extends State<SplashScreen> {
 
   Future<void> _checkSession() async {
     String? isLoggedIn = await Store.getLoggedIn();
+    String? isadminLoggedIn = await Store.getisadminLoggedIn();
 
     if (!mounted) return;
 
@@ -47,6 +50,13 @@ class _MyHomePageState extends State<SplashScreen> {
         context,
         MaterialPageRoute(
           builder: (context) => Dashboard(selectIndex: 0),
+        ),
+      );
+    } else if (isadminLoggedIn == 'yes') {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AdminDashboard(selectIndex: 0),
         ),
       );
     } else {

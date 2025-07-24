@@ -5,11 +5,10 @@ class Store {
   const Store._();
 
   static const String _usernameKey = "username";
-
-    static const String _userid = "userid";
-        static const String _name = "name";
-
+  static const String _userid = "userid";
+  static const String _name = "name";
   static const String _isLoggedIn = "isLoggedIn";
+  static const String _isadmin = "isAdmin";
 
 //isLoggedIn
   static Future<void> setLoggedIn(String loggedvalue) async {
@@ -23,6 +22,18 @@ class Store {
     return preferences.getString(_isLoggedIn);
   }
 
+//isLoggedIn
+  static Future<void> setisadminLoggedIn(String loggedvaluee) async {
+    log("logged added");
+    final preferences = await SharedPreferences.getInstance();
+    await preferences.setString(_isadmin, loggedvaluee);
+  }
+
+  static Future<String?> getisadminLoggedIn() async {
+    final preferences = await SharedPreferences.getInstance();
+    return preferences.getString(_isadmin);
+  }
+
 //username
   static Future<void> setUsername(String username) async {
     final preferences = await SharedPreferences.getInstance();
@@ -33,8 +44,6 @@ class Store {
     final preferences = await SharedPreferences.getInstance();
     return preferences.getString(_usernameKey);
   }
-
-
 
   static Future<void> setUserid(String userid) async {
     final preferences = await SharedPreferences.getInstance();
@@ -55,7 +64,6 @@ class Store {
     final preferences = await SharedPreferences.getInstance();
     return preferences.getString(_name);
   }
-
 
   static Future<void> clear() async {
     final preferences = await SharedPreferences.getInstance();

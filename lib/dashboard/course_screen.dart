@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
@@ -75,6 +76,7 @@ class _CourseScreenState extends State<CourseScreen> {
                                           courseid: coursedata.id!,
                                           batchid: coursedata.batchid!,
                                           coursename: coursedata.coursename!,
+                                                     batchstartdate: coursedata.startdate!,
                                         );
                                       },
                                     ));
@@ -85,17 +87,36 @@ class _CourseScreenState extends State<CourseScreen> {
                                       padding: const EdgeInsets.all(10.0),
                                       child: Column(
                                         children: [
-                                          ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                            child: FadeInImage.assetNetwork(
-                                              placeholder:
-                                                  'assets/images/gif.gif', // Your GIF file in assets
-                                              image: coursedata.courseimage
-                                                  .toString(),
-                                              fit: BoxFit.cover,
-                                            ),
+                                          // ClipRRect(
+                                          //   borderRadius:
+                                          //       BorderRadius.circular(15),
+                                          //   child: FadeInImage.assetNetwork(
+                                          //     placeholder:
+                                          //         'assets/images/gif.gif', // Your GIF file in assets
+                                          //     image: coursedata.courseimage
+                                          //         .toString(),
+                                          //     fit: BoxFit.cover,
+                                          //   ),
+                                          // ),
+                                            ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          child: CachedNetworkImage(
+                                            imageUrl: coursedata.courseimage
+                                                .toString(),
+                                            placeholder: (context, url) =>
+                                                Image.asset(
+                                                    'assets/images/gif.gif',
+                                                    fit: BoxFit.cover),
+                                            fadeInDuration: Duration(
+                                                milliseconds:
+                                                    300), // Optional fade-in effect
+                                            fit: BoxFit.cover,
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    Icon(Icons.error),
                                           ),
+                                        ),
                                           SizedBox(
                                             height: 10,
                                           ),
