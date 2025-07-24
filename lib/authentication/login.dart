@@ -158,20 +158,23 @@ class _LoginScreenState extends State<LoginScreen> {
                                 countrycode = phone.countryCode;
                               },
                             ),
-                            const SizedBox(height: 30),
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => LoginPageAdmin()),
-                                );
-                              },
-                              child: Text(
-                                "Is admin ?",
-                                style: TextStyle(
-                                  fontSize: getNormalFontSize(context),
-                                  fontWeight: FontWeight.normal,
+                            const SizedBox(height: 10),
+                            Align(
+                              alignment: Alignment.bottomRight,
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => LoginPageAdmin()),
+                                  );
+                                },
+                                child: Text(
+                                  "Is admin ?",
+                                  style: TextStyle(
+                                    fontSize: getNormalFontSize(context),
+                                    fontWeight: FontWeight.normal,
+                                  ),
                                 ),
                               ),
                             ),

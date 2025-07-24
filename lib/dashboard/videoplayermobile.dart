@@ -1,3 +1,4 @@
+import 'package:designingstudio/contrains.dart';
 import 'package:flutter/foundation.dart' show kIsWeb; // Add this import
 import 'package:flutter/services.dart';
 import 'package:flutter/gestures.dart';
@@ -111,23 +112,39 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
       appBar: _isFullScreen
           ? null
           : AppBar(
-              backgroundColor: Colors.black,
-              leading: IconButton(
+              toolbarHeight: 80,
+              backgroundColor: Colors.white,
+              leading: MaterialButton(
+                height: 45,
+                minWidth: 45,
+                color: primaycolor,
+                shape: const CircleBorder(),
+                elevation: 4,
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                icon: const Icon(
-                  Icons.arrow_back_ios_new,
-                  color: Colors.white,
+                child: const Icon(
+                  Icons.keyboard_arrow_left_outlined,
+                  color: Colors.black,
+                  size: 24,
                 ),
               ),
-              title: Text(
-                widget.videoTitle,
-                style: const TextStyle(
-                  fontSize: 13,
-                  color: Colors.white,
-                ),
-              ),
+              // IconButton(
+              //   onPressed: () {
+              //     Navigator.pop(context);
+              //   },
+              //   icon: const Icon(
+              //     Icons.arrow_back_ios_new,
+              //     color: Colors.white,
+              //   ),
+              // ),
+              // title: Text(
+              //   widget.videoTitle,
+              //   style: const TextStyle(
+              //     fontSize: 13,
+              //     color: Colors.white,
+              //   ),
+              // ),
               centerTitle: false,
               elevation: 0,
             ),
@@ -137,6 +154,20 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 15, right: 15, top: 15),
+                    child: Text(
+                      widget.videoTitle,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
                   // Video Player
                   AspectRatio(
                     aspectRatio: 16 / 9,
@@ -170,7 +201,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                                     widget.videoDescription),
                                 style: const TextStyle(
                                   fontSize: 12,
-                                  color: Colors.white,
+                                  color: Colors.black,
                                 ),
                               ),
                       ],
