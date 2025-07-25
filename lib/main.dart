@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
     create: (context) => CommonViewModel(),
         child: MaterialApp(
-          title: 'Designing-studio',
+          title: 'Designing Studio',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             fontFamily: 'Poppins',

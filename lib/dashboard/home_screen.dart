@@ -22,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     vm = Provider.of<CommonViewModel>(context, listen: false);
-    vm!.fetchallcourse();
+    vm!.fetchallcourse(0);
     loaddata();
     super.initState();
   }

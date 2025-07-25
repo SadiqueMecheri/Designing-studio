@@ -1,34 +1,32 @@
-import 'dart:developer';
-
 import 'package:designingstudio/contrains.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import 'package:intl_phone_field/country_picker_dialog.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
+import '../model/allbatchreponse.dart';
+import '../model/my_unit_only.dart';
 import '../provider/commonviewmodel.dart';
 
-class addadmissions extends StatefulWidget {
-  const addadmissions({
+class Addbatch extends StatefulWidget {
+  final BathcResp? coursedata;
+  final int from;
+
+  const Addbatch({
     super.key,
+    required this.coursedata,
+    required this.from,
   });
 
   @override
-  State<addadmissions> createState() => _RegistrationScreenState();
+  State<Addbatch> createState() => _RegistrationScreenState();
 }
 
-class _RegistrationScreenState extends State<addadmissions> {
+class _RegistrationScreenState extends State<Addbatch> {
   CommonViewModel? vm;
   bool isloading = false;
-  String? fullPhoneNumber;
-  String? countrycode;
 
-  String? selectedBatchId; // to store the selected batch ID
-  String? selectedBatchName; // to store the selected batch name for display
-  String? selectedCourseid; // to store the selected batch name for display
+  String? selectedcourseId; // to store the selected batch ID
+  String? selectedcourseName; // to store the selected batch name for display
 
   @override
   void initState() {
@@ -40,16 +38,28 @@ class _RegistrationScreenState extends State<addadmissions> {
         statusBarBrightness: Brightness.light, // For iOS
       ),
     );
+
     vm = Provider.of<CommonViewModel>(context, listen: false);
 
-    vm!.ftechbatch();
-
+    vm!.fetchallcourse(1);
+    if (widget.from == 1) {
+      loaddata();
+    }
     super.initState();
   }
 
-  final TextEditingController _namecontroller = TextEditingController();
-  TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _amountcontroller = TextEditingController();
+  final TextEditingController _selectedadta = TextEditingController();
+  final TextEditingController _batchname = TextEditingController();
+
+  loaddata() {
+    _batchname.text = widget.coursedata!.batchname!;
+    _selectedadta.text = widget.coursedata!.startdate!.split('T')[0];
+
+    selectedcourseId = widget.coursedata!.courseid!.toString();
+    selectedcourseName = widget.coursedata!.course_name;
+
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,11 +73,26 @@ class _RegistrationScreenState extends State<addadmissions> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                MaterialButton(
+                  height: 45,
+                  minWidth: 45,
+                  color: primaycolor,
+                  shape: const CircleBorder(),
+                  elevation: 4,
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Icon(
+                    Icons.keyboard_arrow_left_outlined,
+                    color: Colors.black,
+                    size: 24,
+                  ),
+                ),
                 SizedBox(
                   height: 20,
                 ),
                 Text(
-                  "Add Admissions",
+                  widget.from == 1 ? "Edit Batch" : "Add Batch",
                   style: TextStyle(
                       fontSize: getetrabigFontSize(context),
                       fontWeight: FontWeight.bold,
@@ -83,10 +108,9 @@ class _RegistrationScreenState extends State<addadmissions> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 10),
-                      const SizedBox(height: 10),
                       Consumer<CommonViewModel>(
                         builder: (context, courses, child) {
-                          if (courses.fetchbatchloading == true) {
+                          if (courses.fetchallcourseloading == true) {
                             return Text(
                               "Loading",
                               style: TextStyle(
@@ -95,7 +119,7 @@ class _RegistrationScreenState extends State<addadmissions> {
                                   color: Colors.black),
                             );
                           } else {
-                            final batchList = courses.batchlist ?? [];
+                            final batchList = courses.allcourselist ?? [];
                             return InputDecorator(
                               decoration: InputDecoration(
                                 filled: true,
@@ -106,7 +130,7 @@ class _RegistrationScreenState extends State<addadmissions> {
                                   child: Padding(
                                     padding: EdgeInsets.all(4),
                                     child: Image.asset(
-                                      "assets/images/batchic.png",
+                                      "assets/images/courseicon.png",
                                       fit: BoxFit.contain,
                                     ),
                                   ),
@@ -135,10 +159,10 @@ class _RegistrationScreenState extends State<addadmissions> {
                                 child: SizedBox(
                                   height: 28,
                                   child: DropdownButton<String>(
-                                    value: selectedBatchId,
+                                    value: selectedcourseId,
                                     isExpanded: true,
                                     hint: Text(
-                                      "Select batch",
+                                      "Select course",
                                       style: TextStyle(
                                           color: Colors.grey.shade400),
                                     ),
@@ -146,7 +170,7 @@ class _RegistrationScreenState extends State<addadmissions> {
                                       return DropdownMenuItem<String>(
                                         value: batch.id?.toString() ?? '',
                                         child: Text(
-                                          batch.batchname ?? 'Unnamed batch',
+                                          batch.coursename ?? 'Unnamed course',
                                           style: TextStyle(
                                             fontSize: 15.0 /
                                                 MediaQuery.textScaleFactorOf(
@@ -159,7 +183,7 @@ class _RegistrationScreenState extends State<addadmissions> {
                                     onChanged: (String? newValue) {
                                       if (newValue != null) {
                                         setState(() {
-                                          selectedBatchId = newValue;
+                                          selectedcourseId = newValue;
                                           var selectedBatch =
                                               batchList.firstWhere(
                                             (batch) =>
@@ -169,12 +193,8 @@ class _RegistrationScreenState extends State<addadmissions> {
                                             ///  orElse: () =>  batch.id?,
                                           );
                                           if (selectedBatch != null) {
-                                            selectedBatchName =
-                                                selectedBatch.batchname;
-
-                                            selectedCourseid = selectedBatch
-                                                .courseid
-                                                .toString();
+                                            selectedcourseName =
+                                                selectedBatch.coursename;
                                           }
                                         });
                                       } // You can also call any other function here when selection changes
@@ -187,80 +207,8 @@ class _RegistrationScreenState extends State<addadmissions> {
                         },
                       ),
                       const SizedBox(height: 10),
-                      IntlPhoneField(
-                         controller: _phoneController,  // Add this line
-
-                        autofocus: false,
-                        cursorColor: Colors.black,
-                        keyboardType: TextInputType.phone,
-                        dropdownIcon: const Icon(
-                          Icons.arrow_drop_down_rounded,
-                          color: Colors.black,
-                        ),
-                        style: TextStyle(
-                          fontSize:
-                              15.0 / MediaQuery.textScaleFactorOf(context),
-                          color: Colors.black,
-                        ),
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.grey.shade100,
-                          hintText: "Phone number",
-                          hintStyle: TextStyle(color: Colors.grey.shade400),
-                          errorStyle: TextStyle(
-                            fontSize:
-                                15.0 / MediaQuery.textScaleFactorOf(context),
-                            color: Colors.red.shade900,
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 15),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: const BorderSide(color: Colors.white),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: const BorderSide(color: Colors.white),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        showCountryFlag: true,
-                        disableLengthCheck: true,
-                        dropdownTextStyle: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.normal,
-                        ),
-                        pickerDialogStyle: PickerDialogStyle(
-                          backgroundColor: Colors.white,
-                          countryCodeStyle: const TextStyle(fontSize: 14),
-                          countryNameStyle: const TextStyle(fontSize: 14),
-                          padding: const EdgeInsets.all(10),
-                          searchFieldInputDecoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.grey.shade100,
-                            hintText: "Search..",
-                            hintStyle: const TextStyle(fontSize: 13),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide:
-                                  BorderSide(color: Colors.grey.shade100),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide:
-                                  BorderSide(color: Colors.grey.shade100),
-                            ),
-                          ),
-                          searchFieldPadding: const EdgeInsets.only(top: 10),
-                        ),
-                        initialCountryCode: 'IN',
-                        onChanged: (phone) {
-                          fullPhoneNumber = phone.completeNumber;
-                          countrycode = phone.countryCode;
-                        },
-                      ),
-                      const SizedBox(height: 10),
                       TextField(
-                        controller: _namecontroller,
+                        controller: _batchname,
                         autofocus: false,
                         cursorColor: Colors.black,
                         keyboardType:
@@ -289,7 +237,8 @@ class _RegistrationScreenState extends State<addadmissions> {
 
                           prefixIconConstraints: BoxConstraints(
                               minWidth: 40, minHeight: 0), // Adjust spacing
-                          hintText: "Enter name", // Changed from "Phone number"
+                          hintText:
+                              "Enter batch name", // Changed from "Phone number"
                           hintStyle: TextStyle(color: Colors.grey.shade400),
                           errorStyle: TextStyle(
                             fontSize:
@@ -315,11 +264,10 @@ class _RegistrationScreenState extends State<addadmissions> {
                       ),
                       const SizedBox(height: 10),
                       TextField(
-                        controller: _amountcontroller,
+                        controller: _selectedadta,
                         autofocus: false,
                         cursorColor: Colors.black,
-                        keyboardType:
-                            TextInputType.text, // Changed from phone to text
+                        readOnly: true, // Make the field non-editable
                         style: TextStyle(
                           fontSize:
                               15.0 / MediaQuery.textScaleFactorOf(context),
@@ -328,25 +276,20 @@ class _RegistrationScreenState extends State<addadmissions> {
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.grey.shade100,
-
                           prefixIcon: CircleAvatar(
                             radius: 12,
-                            backgroundColor: Colors
-                                .transparent, // or your preferred background
+                            backgroundColor: Colors.transparent,
                             child: Padding(
-                              padding: EdgeInsets.all(
-                                  4), // Adjust padding to control size
+                              padding: EdgeInsets.all(4),
                               child: Image.asset(
-                                "assets/images/price.png",
+                                "assets/images/calender.png",
                                 fit: BoxFit.contain,
                               ),
                             ),
                           ),
-
-                          prefixIconConstraints: BoxConstraints(
-                              minWidth: 40, minHeight: 0), // Adjust spacing
-                          hintText:
-                              "Enter amount", // Changed from "Phone number"
+                          prefixIconConstraints:
+                              BoxConstraints(minWidth: 40, minHeight: 0),
+                          hintText: "Select Starting date",
                           hintStyle: TextStyle(color: Colors.grey.shade400),
                           errorStyle: TextStyle(
                             fontSize:
@@ -363,11 +306,21 @@ class _RegistrationScreenState extends State<addadmissions> {
                             borderSide: const BorderSide(color: Colors.white),
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          // Removed phone-specific decorations
                         ),
-                        onChanged: (value) {
-                          // Handle text changes here
-                          // fullPhoneNumber = value; // Remove phone-specific handling
+                        onTap: () async {
+                          // Show date picker when tapped
+                          DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2101),
+                          );
+
+                          if (pickedDate != null) {
+                            String formattedDate =
+                                DateFormat('yyyy-MM-dd').format(pickedDate);
+                            _selectedadta.text = formattedDate;
+                          }
                         },
                       ),
                     ],
@@ -386,10 +339,9 @@ class _RegistrationScreenState extends State<addadmissions> {
                         : InkWell(
                             borderRadius: BorderRadius.circular(20),
                             onTap: () {
-                              if (_namecontroller.text.trim().isEmpty ||
-                                  _amountcontroller.text.trim().isEmpty ||
-                                  selectedBatchId == null ||
-                                  fullPhoneNumber == null) {
+                              if (_selectedadta.text.trim().isEmpty ||
+                                  selectedcourseId == null ||
+                                  _batchname.text.trim().isEmpty) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text('Please fill all fields'),
@@ -405,55 +357,32 @@ class _RegistrationScreenState extends State<addadmissions> {
                               });
 
                               vm!
-                                  .addadmission(
-                                fullPhoneNumber!,
-                                _namecontroller.text,
-                                int.tryParse(selectedCourseid!)!,
-                                int.tryParse(selectedBatchId!)!,
-                              )
+                                  .addbatch(
+                                      _batchname.text,
+                                      int.tryParse(selectedcourseId!)!,
+                                      _selectedadta.text,
+                                      widget.from,
+                                      widget.coursedata != null
+                                          ? widget.coursedata!.id
+                                          : 0)
                                   .then((value) {
                                 setState(() {
                                   isloading = false;
                                 });
 
                                 if (vm!.responsedata.success == 1) {
-
-
-                                  selectedCourseid=null;
-                                  selectedBatchName=null;
-                                  selectedBatchId=null;
-                                  fullPhoneNumber=null;
-                                  _namecontroller.clear();
-                                  _amountcontroller.clear();
-                                   _phoneController.clear();
-    // Also clear your stored values if needed
-    fullPhoneNumber = '';
-    countrycode = '';
-
-
-                                  setState(() {
-                                    
-                                  });
-                                  
-
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text('Admission Added Successfully'),
-                                      duration: Duration(seconds: 2),
-                                    ),
-                                  );
                                   // Navigator.push(context, MaterialPageRoute(
                                   //   builder: (context) {
                                   //     return AdminDashboard(selectIndex: 0);
                                   //   },
                                   // ));
-                                ///  vm!.fetchmyunitonlyforamin(widget.courseid);
-                                 // Navigator.pop(context);
+                                  vm!.ftechbatch();
+                                  Navigator.pop(context);
                                 } else {
                                   // log("registration failed");
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                      content: Text('Add Class failed'),
+                                      content: Text('Add Batch failed'),
                                       duration: Duration(seconds: 2),
                                     ),
                                   );
@@ -472,12 +401,8 @@ class _RegistrationScreenState extends State<addadmissions> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Icon(
-                                        Icons.keyboard_arrow_right,
-                                        color: Colors.transparent,
-                                      ),
                                       Text(
-                                        "Add",
+                                        widget.from == 1 ? "Edit" : "Add",
                                         style: TextStyle(
                                             color: Colors.black,
                                             fontSize: getbigFontSize(context),

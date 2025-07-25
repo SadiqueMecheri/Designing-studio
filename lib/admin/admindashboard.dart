@@ -20,6 +20,7 @@ class AdminDashboard extends StatefulWidget {
 
 class _DashboardState extends State<AdminDashboard> {
   int currentIndex = 0;
+    DateTime? currentBackPressTime;
   @override
   void initState() {
     currentIndex = widget.selectIndex;
@@ -98,125 +99,153 @@ class _DashboardState extends State<AdminDashboard> {
     Container()
   ];
 
+
+   Future<bool> _onWillPop() async {
+    if (currentIndex != 0) {
+      setState(() {
+        currentIndex = 0;
+      });
+      return false;
+    }
+
+    DateTime now = DateTime.now();
+    if (currentBackPressTime == null ||
+        now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
+      currentBackPressTime = now;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Press back again to exit'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return false;
+    }
+    return true;
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      body: pages[currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-          onTap: OnTapped,
-          backgroundColor: Colors.white,
-          iconSize: 18,
-          selectedItemColor: const Color.fromRGBO(0, 0, 0, 1),
-          unselectedItemColor: Colors.grey,
-          currentIndex: currentIndex,
-          selectedFontSize: 12,
-          unselectedFontSize: 10,
-          items: <BottomNavigationBarItem>[
-            currentIndex == 0
-                ? BottomNavigationBarItem(
-                    icon: Image.asset(
-                      'assets/images/courseadmin1.png',
-                      height: 24,
-                      width: 24,
+    return  WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        backgroundColor: backgroundColor,
+        body: pages[currentIndex],
+        bottomNavigationBar: BottomNavigationBar(
+            onTap: OnTapped,
+            backgroundColor: Colors.white,
+            iconSize: 18,
+            selectedItemColor: const Color.fromRGBO(0, 0, 0, 1),
+            unselectedItemColor: Colors.grey,
+            currentIndex: currentIndex,
+            selectedFontSize: 12,
+            unselectedFontSize: 10,
+            items: <BottomNavigationBarItem>[
+              currentIndex == 0
+                  ? BottomNavigationBarItem(
+                      icon: Image.asset(
+                        'assets/images/courseadmin1.png',
+                        height: 24,
+                        width: 24,
+                      ),
+                      label: "Course",
+                      tooltip: "Course",
+                    )
+                  : BottomNavigationBarItem(
+                      icon: Image.asset(
+                        'assets/images/courseadmin0.png',
+                        color: Colors.grey,
+                        height: 24,
+                        width: 24,
+                      ),
+                      label: "Course",
+                      tooltip: "Course",
                     ),
-                    label: "Course",
-                    tooltip: "Course",
-                  )
-                : BottomNavigationBarItem(
-                    icon: Image.asset(
-                      'assets/images/courseadmin0.png',
-                      color: Colors.grey,
-                      height: 24,
-                      width: 24,
+              currentIndex == 1
+                  ? BottomNavigationBarItem(
+                      icon: Image.asset(
+                        'assets/images/viewadm1.png',
+                        height: 24,
+                        width: 24,
+                      ),
+                      label: "View Adm",
+                      tooltip: "View Adm",
+                    )
+                  : BottomNavigationBarItem(
+                      icon: Image.asset(
+                        'assets/images/viewadm0.png',
+                        color: Colors.grey,
+                        height: 24,
+                        width: 24,
+                      ),
+                      label: "View Adm",
+                      tooltip: "View Adm",
                     ),
-                    label: "Course",
-                    tooltip: "Course",
-                  ),
-            currentIndex == 1
-                ? BottomNavigationBarItem(
-                    icon: Image.asset(
-                      'assets/images/viewadm1.png',
-                      height: 24,
-                      width: 24,
+              currentIndex == 2
+                  ? BottomNavigationBarItem(
+                      icon: Image.asset(
+                        'assets/images/addadm1.png',
+                        // color: primaycolor,
+                        height: 24,
+                        width: 24,
+                      ),
+                      label: "Add Adm",
+                      tooltip: "Add Adm",
+                    )
+                  : BottomNavigationBarItem(
+                      icon: Image.asset(
+                        'assets/images/addadm0.png',
+                        color: Colors.grey,
+                        height: 24,
+                        width: 24,
+                      ),
+                      label: "Add Adm",
+                      tooltip: "Add Adm",
                     ),
-                    label: "View Adm",
-                    tooltip: "View Adm",
-                  )
-                : BottomNavigationBarItem(
-                    icon: Image.asset(
-                      'assets/images/viewadm0.png',
-                      color: Colors.grey,
-                      height: 24,
-                      width: 24,
+              currentIndex == 3
+                  ? BottomNavigationBarItem(
+                      icon: Image.asset(
+                        'assets/images/batch1.png',
+                        // color: primaycolor,
+                        height: 24,
+                        width: 24,
+                      ),
+                      label: "Batch",
+                      tooltip: "Batch",
+                    )
+                  : BottomNavigationBarItem(
+                      icon: Image.asset(
+                        'assets/images/batch0.png',
+                        color: Colors.grey,
+                        height: 24,
+                        width: 24,
+                      ),
+                      label: "Batch",
+                      tooltip: "Batch",
                     ),
-                    label: "View Adm",
-                    tooltip: "View Adm",
-                  ),
-            currentIndex == 2
-                ? BottomNavigationBarItem(
-                    icon: Image.asset(
-                      'assets/images/addadm1.png',
-                      // color: primaycolor,
-                      height: 24,
-                      width: 24,
+              currentIndex == 4
+                  ? BottomNavigationBarItem(
+                      icon: Image.asset(
+                        'assets/images/logout1.png',
+                        // color: primaycolor,
+                        height: 24,
+                        width: 24,
+                      ),
+                      label: "Batch",
+                      tooltip: "Batch",
+                    )
+                  : BottomNavigationBarItem(
+                      icon: Image.asset(
+                        'assets/images/logout0.png',
+                        color: Colors.grey,
+                        height: 24,
+                        width: 24,
+                      ),
+                      label: "Batch",
+                      tooltip: "Batch",
                     ),
-                    label: "Add Adm",
-                    tooltip: "Add Adm",
-                  )
-                : BottomNavigationBarItem(
-                    icon: Image.asset(
-                      'assets/images/addadm0.png',
-                      color: Colors.grey,
-                      height: 24,
-                      width: 24,
-                    ),
-                    label: "Add Adm",
-                    tooltip: "Add Adm",
-                  ),
-            currentIndex == 3
-                ? BottomNavigationBarItem(
-                    icon: Image.asset(
-                      'assets/images/batch1.png',
-                      // color: primaycolor,
-                      height: 24,
-                      width: 24,
-                    ),
-                    label: "Batch",
-                    tooltip: "Batch",
-                  )
-                : BottomNavigationBarItem(
-                    icon: Image.asset(
-                      'assets/images/batch0.png',
-                      color: Colors.grey,
-                      height: 24,
-                      width: 24,
-                    ),
-                    label: "Batch",
-                    tooltip: "Batch",
-                  ),
-            currentIndex == 4
-                ? BottomNavigationBarItem(
-                    icon: Image.asset(
-                      'assets/images/logout1.png',
-                      // color: primaycolor,
-                      height: 24,
-                      width: 24,
-                    ),
-                    label: "Batch",
-                    tooltip: "Batch",
-                  )
-                : BottomNavigationBarItem(
-                    icon: Image.asset(
-                      'assets/images/logout0.png',
-                      color: Colors.grey,
-                      height: 24,
-                      width: 24,
-                    ),
-                    label: "Batch",
-                    tooltip: "Batch",
-                  ),
-          ]),
+            ]),
+      ),
     );
   }
 }
