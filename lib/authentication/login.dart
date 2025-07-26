@@ -56,135 +56,137 @@ class _LoginScreenState extends State<LoginScreen> {
         backgroundColor: primaycolor,
         body: Stack(
           children: [
-            SingleChildScrollView(
-              child: Center(
-                child: Column(
-                  children: [
-                    const SizedBox(height: 100),
-                    Image.asset("assets/images/logo.png", height: 80),
-                    const SizedBox(height: 50),
-                    Container(
-                      height: MediaQuery.of(context).size.height / 1.4,
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        color: backgroundColor,
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(30),
-                          topRight: Radius.circular(30),
+            Center(
+              child: Column(
+                children: [
+                  const SizedBox(height: 100),
+                  Image.asset("assets/images/logo.png", height: 80),
+                  const SizedBox(height: 50),
+                  Flexible(
+                    child: SingleChildScrollView(
+                      child: Container(
+                      height: MediaQuery.of(context).size.height,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: backgroundColor,
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(30),
+                            topRight: Radius.circular(30),
+                          ),
                         ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(30.0),
-                        child: Column(
-                          children: [
-                            const SizedBox(height: 30),
-                            Text(
-                              "Enter your phone number",
-                              style: TextStyle(
-                                fontSize: getNormalFontSize(context),
-                                fontWeight: FontWeight.normal,
+                        child: Padding(
+                          padding: const EdgeInsets.all(30.0),
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 30),
+                              Text(
+                                "Enter your phone number",
+                                style: TextStyle(
+                                  fontSize: getNormalFontSize(context),
+                                  fontWeight: FontWeight.normal,
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 10),
-                            IntlPhoneField(
-                              autofocus: false,
-                              cursorColor: Colors.black,
-                              keyboardType: TextInputType.phone,
-                              dropdownIcon: const Icon(
-                                Icons.arrow_drop_down_rounded,
-                                color: Colors.black,
-                              ),
-                              style: TextStyle(
-                                fontSize: 15.0 /
-                                    MediaQuery.textScaleFactorOf(context),
-                                color: Colors.black,
-                              ),
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.grey.shade100,
-                                hintText: "Phone number",
-                                hintStyle:
-                                    TextStyle(color: Colors.grey.shade400),
-                                errorStyle: TextStyle(
+                              const SizedBox(height: 10),
+                              IntlPhoneField(
+                                autofocus: false,
+                                cursorColor: Colors.black,
+                                keyboardType: TextInputType.phone,
+                                dropdownIcon: const Icon(
+                                  Icons.arrow_drop_down_rounded,
+                                  color: Colors.black,
+                                ),
+                                style: TextStyle(
                                   fontSize: 15.0 /
                                       MediaQuery.textScaleFactorOf(context),
-                                  color: Colors.red.shade900,
+                                  color: Colors.black,
                                 ),
-                                contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 15),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide:
-                                      const BorderSide(color: Colors.white),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide:
-                                      const BorderSide(color: Colors.white),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                              showCountryFlag: true,
-                              disableLengthCheck: false,
-                              dropdownTextStyle: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.normal,
-                              ),
-                              pickerDialogStyle: PickerDialogStyle(
-                                backgroundColor: Colors.white,
-                                countryCodeStyle: const TextStyle(fontSize: 14),
-                                countryNameStyle: const TextStyle(fontSize: 14),
-                                padding: const EdgeInsets.all(10),
-                                searchFieldInputDecoration: InputDecoration(
+                                decoration: InputDecoration(
                                   filled: true,
                                   fillColor: Colors.grey.shade100,
-                                  hintText: "Search..",
-                                  hintStyle: const TextStyle(fontSize: 13),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                    borderSide:
-                                        BorderSide(color: Colors.grey.shade100),
+                                  hintText: "Phone number",
+                                  hintStyle:
+                                      TextStyle(color: Colors.grey.shade400),
+                                  errorStyle: TextStyle(
+                                    fontSize: 15.0 /
+                                        MediaQuery.textScaleFactorOf(context),
+                                    color: Colors.red.shade900,
                                   ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(20),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 15),
+                                  focusedBorder: UnderlineInputBorder(
                                     borderSide:
-                                        BorderSide(color: Colors.grey.shade100),
+                                        const BorderSide(color: Colors.white),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide:
+                                        const BorderSide(color: Colors.white),
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
                                 ),
-                                searchFieldPadding:
-                                    const EdgeInsets.only(top: 10),
-                              ),
-                              initialCountryCode: 'IN',
-                              onChanged: (phone) {
-                                fullPhoneNumber = phone.completeNumber;
-                                countrycode = phone.countryCode;
-                              },
-                            ),
-                            const SizedBox(height: 10),
-                            Align(
-                              alignment: Alignment.bottomRight,
-                              child: InkWell(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => LoginPageAdmin()),
-                                  );
+                                showCountryFlag: true,
+                                disableLengthCheck: false,
+                                dropdownTextStyle: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                                pickerDialogStyle: PickerDialogStyle(
+                                  backgroundColor: Colors.white,
+                                  countryCodeStyle: const TextStyle(fontSize: 14),
+                                  countryNameStyle: const TextStyle(fontSize: 14),
+                                  padding: const EdgeInsets.all(10),
+                                  searchFieldInputDecoration: InputDecoration(
+                                    filled: true,
+                                    fillColor: Colors.grey.shade100,
+                                    hintText: "Search..",
+                                    hintStyle: const TextStyle(fontSize: 13),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide:
+                                          BorderSide(color: Colors.grey.shade100),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide:
+                                          BorderSide(color: Colors.grey.shade100),
+                                    ),
+                                  ),
+                                  searchFieldPadding:
+                                      const EdgeInsets.only(top: 10),
+                                ),
+                                initialCountryCode: 'IN',
+                                onChanged: (phone) {
+                                  fullPhoneNumber = phone.completeNumber;
+                                  countrycode = phone.countryCode;
                                 },
-                                child: Text(
-                                  "Is admin ?",
-                                  style: TextStyle(
-                                    fontSize: getNormalFontSize(context),
-                                    fontWeight: FontWeight.normal,
+                              ),
+                              const SizedBox(height: 10),
+                              Align(
+                                alignment: Alignment.bottomRight,
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => LoginPageAdmin()),
+                                    );
+                                  },
+                                  child: Text(
+                                    "Is admin ?",
+                                    style: TextStyle(
+                                      fontSize: getNormalFontSize(context),
+                                      fontWeight: FontWeight.normal,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
 

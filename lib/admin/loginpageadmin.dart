@@ -70,7 +70,7 @@ class _LoginScreenState extends State<LoginPageAdmin> {
                     Image.asset("assets/images/logo.png", height: 80),
                     const SizedBox(height: 50),
                     Container(
-                      height: MediaQuery.of(context).size.height / 1.4,
+                      height: MediaQuery.of(context).size.height,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                         color: backgroundColor,
