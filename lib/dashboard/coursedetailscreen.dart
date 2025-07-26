@@ -135,7 +135,7 @@ class _coursedetailsscreenState extends State<coursedetailsscreen> {
 
                                 vm!
                                     .addadmission(mobileno!, name!,
-                                        widget.coursedata.id!, 1)
+                                        widget.coursedata.id!, 7)
                                     .then((value) {
                                   setState(() {
                                     isloading = false;
@@ -236,7 +236,7 @@ class _coursedetailsscreenState extends State<coursedetailsscreen> {
 
                                 vm!
                                     .addadmission(mobileno!, name!,
-                                        widget.coursedata.id!, 1)
+                                        widget.coursedata.id!, 7)
                                     .then((value) {
                                   setState(() {
                                     isloading = false;
