@@ -474,10 +474,10 @@ class _RegistrationScreenState extends State<AddClass> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Icon(
-                                        Icons.keyboard_arrow_right,
-                                        color: Colors.transparent,
-                                      ),
+                                      // Icon(
+                                      //   Icons.keyboard_arrow_right,
+                                      //   color: Colors.transparent,
+                                      // ),
                                       Text(
                                         widget.from == 1 ? "Edit" : "Add",
                                         style: TextStyle(

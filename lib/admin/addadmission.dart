@@ -320,7 +320,7 @@ class _RegistrationScreenState extends State<addadmissions> {
                         autofocus: false,
                         cursorColor: Colors.black,
                         keyboardType:
-                            TextInputType.text, // Changed from phone to text
+                            TextInputType.number, // Changed from phone to text
                         style: TextStyle(
                           fontSize:
                               15.0 / MediaQuery.textScaleFactorOf(context),
@@ -484,10 +484,10 @@ class _RegistrationScreenState extends State<addadmissions> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Icon(
-                                        Icons.keyboard_arrow_right,
-                                        color: Colors.transparent,
-                                      ),
+                                      // Icon(
+                                      //   Icons.keyboard_arrow_right,
+                                      //   color: Colors.transparent,
+                                      // ),
                                       Text(
                                         "Add",
                                         style: TextStyle(

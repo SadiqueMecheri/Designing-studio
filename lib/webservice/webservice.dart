@@ -101,8 +101,8 @@ class Webservice {
 
     Map<String, dynamic> data = {
       'coursename': coursename,
-      'courseimage': description,
-      "description": image,
+      'courseimage':image ,
+      "description": description,
       "price": price,
       "note": note,
       "id": id

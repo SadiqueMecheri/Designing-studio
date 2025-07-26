@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:designingstudio/contrains.dart';
 import 'package:designingstudio/dashboard/course_screen.dart';
 import 'package:designingstudio/dashboard/home_screen.dart';
@@ -62,7 +64,8 @@ class _DashboardState extends State<Dashboard> {
       );
       return false;
     }
-    return true;
+         exit(0);
+    // return true;
   }
 
   @override

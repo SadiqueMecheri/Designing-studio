@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:designingstudio/contrains.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -120,7 +122,8 @@ class _DashboardState extends State<AdminDashboard> {
       );
       return false;
     }
-    return true;
+     exit(0);
+    //return true;
   }
 
 

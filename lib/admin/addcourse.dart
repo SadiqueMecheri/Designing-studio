@@ -280,8 +280,8 @@ class _RegistrationScreenState extends State<AddCourse> {
                         controller: _priceController,
                         autofocus: false,
                         cursorColor: Colors.black,
-                        keyboardType:
-                            TextInputType.text, // Changed from phone to text
+                    keyboardType:
+                            TextInputType.number,
                         style: TextStyle(
                           fontSize:
                               15.0 / MediaQuery.textScaleFactorOf(context),
@@ -472,10 +472,10 @@ class _RegistrationScreenState extends State<AddCourse> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Icon(
-                                        Icons.keyboard_arrow_right,
-                                        color: Colors.transparent,
-                                      ),
+                                      // Icon(
+                                      //   Icons.keyboard_arrow_right,
+                                      //   color: Colors.transparent,
+                                      // ),
                                       Text(
                                      widget.from == 1?"Edit":   "Add",
                                         style: TextStyle(
