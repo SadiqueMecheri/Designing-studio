@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
+import '../InternetHelper/internethelper.dart';
 import '../contrains.dart';
 import '../provider/commonviewmodel.dart';
 import '../session/shared_preferences.dart';
@@ -176,16 +177,11 @@ class _HomeScreenState extends State<AdminCourseView> {
                                 bool isActive = coursedata.isactive == 1;
                                 return InkWell(
                                   onTap: () {
-                                    
-
-
-                                        Navigator.push(context, MaterialPageRoute(
+                                    Navigator.push(context, MaterialPageRoute(
                                       builder: (context) {
                                         return SubjectScreenAdmin(
                                           courseid: coursedata.id!,
-                                      
                                           coursename: coursedata.coursename!,
-                                                  
                                         );
                                       },
                                     ));
@@ -251,7 +247,7 @@ class _HomeScreenState extends State<AdminCourseView> {
                                                 fontWeight: FontWeight.normal,
                                                 color: Colors.grey),
                                           ),
-                                  
+
                                           Row(
                                             children: [
                                               GestureDetector(
@@ -260,7 +256,8 @@ class _HomeScreenState extends State<AdminCourseView> {
                                                       MaterialPageRoute(
                                                     builder: (context) {
                                                       return AddCourse(
-                                                          coursedata: coursedata,
+                                                          coursedata:
+                                                              coursedata,
                                                           from: 1);
                                                     },
                                                   ));
@@ -307,10 +304,20 @@ class _HomeScreenState extends State<AdminCourseView> {
                                                                 "Cancel"),
                                                           ),
                                                           TextButton(
-                                                            onPressed: () async {
+                                                            onPressed:
+                                                                () async {
                                                               Navigator.of(
                                                                       context)
-                                                                  .pop(); // Close the dialog
+                                                                  .pop();
+
+                                                              bool connected =
+                                                                  await isConnectedToInternet();
+
+                                                              if (!connected) {
+                                                                showNoInternetSnackBar(
+                                                                    context);
+                                                                return;
+                                                              } // Close the dialog
                                                               await _deleteItem(
                                                                   coursedata
                                                                       .id!); // Call your API function
@@ -342,13 +349,22 @@ class _HomeScreenState extends State<AdminCourseView> {
                                               ),
                                               Spacer(),
                                               Align(
-                                                alignment: Alignment.bottomRight,
+                                                alignment:
+                                                    Alignment.bottomRight,
                                                 child: Transform.scale(
                                                   scale: 0.5, //
                                                   child: Switch(
                                                     value: isActive,
                                                     onChanged:
                                                         (bool value) async {
+                                                      bool connected =
+                                                          await isConnectedToInternet();
+
+                                                      if (!connected) {
+                                                        showNoInternetSnackBar(
+                                                            context);
+                                                        return;
+                                                      }
                                                       await _showConfirmationDialog(
                                                         context,
                                                         coursedata.isactive!,

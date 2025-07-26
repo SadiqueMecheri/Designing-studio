@@ -44,6 +44,8 @@ dependencies:
   url_launcher:
   cached_network_image: ^3.3.0
   intl:
+  connectivity_plus: ^6.1.4
+  internet_connection_checker:
 
 dev_dependencies:
   flutter_test:

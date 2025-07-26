@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import '../InternetHelper/internethelper.dart';
 import '../model/allbatchreponse.dart';
 import '../model/my_unit_only.dart';
 import '../provider/commonviewmodel.dart';
@@ -338,7 +339,14 @@ class _RegistrationScreenState extends State<Addbatch> {
                         ? Center(child: CircularProgressIndicator())
                         : InkWell(
                             borderRadius: BorderRadius.circular(20),
-                            onTap: () {
+                            onTap: () async {
+
+                                bool connected = await isConnectedToInternet();
+
+                        if (!connected) {
+                          showNoInternetSnackBar(context);
+                          return;
+                        }
                               if (_selectedadta.text.trim().isEmpty ||
                                   selectedcourseId == null ||
                                   _batchname.text.trim().isEmpty) {

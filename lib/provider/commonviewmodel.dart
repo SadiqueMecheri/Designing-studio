@@ -151,7 +151,7 @@ class CommonViewModel extends ChangeNotifier {
   bool fetchallcourseloading = false;
 
   late List<CourseMMOdel> allcourselist;
-  int? from;
+  int? android;
    int? apple;
   Future<Map<String, dynamic>> fetchallcourse(int from) async {
     fetchallcourseloading = true;
@@ -159,8 +159,8 @@ class CommonViewModel extends ChangeNotifier {
     allcourse = await Webservice().fetchallcourse(from);
     allcourselist = allcourse['allcoursedata'];
     log("allcourselist length ====== ${allcourselist.length}");
-    // from = allcourse['from'];
-    //   apple = allcourse['apple'];
+    android = allcourse['android'];
+     apple = allcourse['apple'];
     fetchallcourseloading = false;
     notifyListeners();
     return allcourse;

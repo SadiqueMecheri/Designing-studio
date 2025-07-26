@@ -8,6 +8,7 @@ import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:provider/provider.dart';
 
+import '../InternetHelper/internethelper.dart';
 import '../admin/loginpageadmin.dart';
 import '../dashboard/dashboard.dart';
 import '../provider/commonviewmodel.dart';
@@ -123,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                               showCountryFlag: true,
-                              disableLengthCheck: true,
+                              disableLengthCheck: false,
                               dropdownTextStyle: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.normal,
@@ -199,7 +200,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       color: primaycolor,
                       shape: const CircleBorder(),
                       elevation: 4,
-                      onPressed: () {
+                      onPressed: () async {
+                        bool connected = await isConnectedToInternet();
+
+                        if (!connected) {
+                          showNoInternetSnackBar(context);
+                          return;
+                        }
                         if (fullPhoneNumber == null) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
@@ -210,6 +217,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                           return;
                         }
+
                         setState(() {
                           isloading = true;
                         });

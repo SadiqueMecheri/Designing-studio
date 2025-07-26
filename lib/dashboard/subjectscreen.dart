@@ -151,11 +151,11 @@ class _CourseScreenState extends State<SubjectScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        // "Today",
-                                           _formatDate(videoDate),
-                                        style: TextStyle(fontSize: 13),
-                                      ),
+                                      // Text(
+                                      //   // "Today",
+                                      //      _formatDate(videoDate),
+                                      //   style: TextStyle(fontSize: 13),
+                                      // ),
                                       SizedBox(
                                         height: 5,
                                       ),

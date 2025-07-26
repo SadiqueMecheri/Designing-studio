@@ -11,14 +11,20 @@ String courseresponseToJson(Courseresponse data) => json.encode(data.toJson());
 class Courseresponse {
     int? success;
     List<CourseMMOdel>? message;
+     int? apple;
+      int? android;
 
     Courseresponse({
         this.success,
         this.message,
+             this.apple,
+        this.android,
     });
 
     factory Courseresponse.fromJson(Map<String, dynamic> json) => Courseresponse(
         success: json["success"],
+          apple: json["apple"],
+              android: json["android"],
         message: json["message"] == null ? [] : List<CourseMMOdel>.from(json["message"]!.map((x) => CourseMMOdel.fromJson(x))),
     );
 

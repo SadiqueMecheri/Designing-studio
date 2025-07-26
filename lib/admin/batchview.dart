@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import '../InternetHelper/internethelper.dart';
 import '../contrains.dart';
 import '../provider/commonviewmodel.dart';
 import 'addbatch.dart';
@@ -261,6 +262,14 @@ class _viewadmissionsState extends State<batchview> {
                                                       value: isActive,
                                                       onChanged:
                                                           (bool value) async {
+
+
+                                                              bool connected = await isConnectedToInternet();
+
+                        if (!connected) {
+                          showNoInternetSnackBar(context);
+                          return;
+                        }
                                                         await _showConfirmationDialog(
                                                           context,
                                                           coursedata.isactive!,

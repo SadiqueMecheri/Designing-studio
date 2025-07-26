@@ -552,8 +552,8 @@ class Webservice {
         'status': true,
         'message': 'successful',
         'allcoursedata': authUser.message,
-        //  'from': authUser.from,
-        //'apple': authUser.apple,
+          'android': authUser.android,
+     'apple': authUser.apple,
       };
     } else {
       result3 = {

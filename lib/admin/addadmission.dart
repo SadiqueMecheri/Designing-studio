@@ -9,6 +9,7 @@ import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:provider/provider.dart';
 
+import '../InternetHelper/internethelper.dart';
 import '../provider/commonviewmodel.dart';
 
 class addadmissions extends StatefulWidget {
@@ -188,7 +189,7 @@ class _RegistrationScreenState extends State<addadmissions> {
                       ),
                       const SizedBox(height: 10),
                       IntlPhoneField(
-                         controller: _phoneController,  // Add this line
+                        controller: _phoneController, // Add this line
 
                         autofocus: false,
                         cursorColor: Colors.black,
@@ -224,7 +225,7 @@ class _RegistrationScreenState extends State<addadmissions> {
                           ),
                         ),
                         showCountryFlag: true,
-                        disableLengthCheck: true,
+                        disableLengthCheck: false,
                         dropdownTextStyle: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.normal,
@@ -385,7 +386,13 @@ class _RegistrationScreenState extends State<addadmissions> {
                         ? Center(child: CircularProgressIndicator())
                         : InkWell(
                             borderRadius: BorderRadius.circular(20),
-                            onTap: () {
+                            onTap: () async {
+                              bool connected = await isConnectedToInternet();
+
+                              if (!connected) {
+                                showNoInternetSnackBar(context);
+                                return;
+                              }
                               if (_namecontroller.text.trim().isEmpty ||
                                   _amountcontroller.text.trim().isEmpty ||
                                   selectedBatchId == null ||
@@ -417,38 +424,43 @@ class _RegistrationScreenState extends State<addadmissions> {
                                 });
 
                                 if (vm!.responsedata.success == 1) {
+                                  if (vm!.responsedata.message ==
+                                      "Course already exists") {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(vm!.responsedata.message
+                                            .toString()),
+                                        duration: Duration(seconds: 2),
+                                      ),
+                                    );
+                                  } else {
+                                    selectedCourseid = null;
+                                    selectedBatchName = null;
+                                    selectedBatchId = null;
+                                    fullPhoneNumber = null;
+                                    _namecontroller.clear();
+                                    _amountcontroller.clear();
+                                    _phoneController.clear();
+                                    // Also clear your stored values if needed
+                                    fullPhoneNumber = '';
+                                    countrycode = '';
 
-
-                                  selectedCourseid=null;
-                                  selectedBatchName=null;
-                                  selectedBatchId=null;
-                                  fullPhoneNumber=null;
-                                  _namecontroller.clear();
-                                  _amountcontroller.clear();
-                                   _phoneController.clear();
-    // Also clear your stored values if needed
-    fullPhoneNumber = '';
-    countrycode = '';
-
-
-                                  setState(() {
-                                    
-                                  });
-                                  
+                                    setState(() {});
 
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text('Admission Added Successfully'),
-                                      duration: Duration(seconds: 2),
-                                    ),
-                                  );
-                                  // Navigator.push(context, MaterialPageRoute(
-                                  //   builder: (context) {
-                                  //     return AdminDashboard(selectIndex: 0);
-                                  //   },
-                                  // ));
-                                ///  vm!.fetchmyunitonlyforamin(widget.courseid);
-                                 // Navigator.pop(context);
+                                      SnackBar(
+                                        content: Text(
+                                            'Admission Added Successfully'),
+                                        duration: Duration(seconds: 2),
+                                      ),
+                                    );
+                                    // Navigator.push(context, MaterialPageRoute(
+                                    //   builder: (context) {
+                                    //     return AdminDashboard(selectIndex: 0);
+                                    //   },
+                                    // ));
+                                    ///  vm!.fetchmyunitonlyforamin(widget.courseid);
+                                  } // Navigator.pop(context);
                                 } else {
                                   // log("registration failed");
                                   ScaffoldMessenger.of(context).showSnackBar(

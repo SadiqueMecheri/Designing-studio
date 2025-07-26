@@ -8,6 +8,7 @@ import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:provider/provider.dart';
 
+import '../InternetHelper/internethelper.dart';
 import '../admin/loginpageadmin.dart';
 import '../dashboard/dashboard.dart';
 import '../provider/commonviewmodel.dart';
@@ -244,7 +245,13 @@ class _LoginScreenState extends State<LoginPageAdmin> {
                 ? Center(child: CircularProgressIndicator())
                 : InkWell(
                     borderRadius: BorderRadius.circular(20),
-                    onTap: () {
+                    onTap: () async {
+                        bool connected = await isConnectedToInternet();
+
+                        if (!connected) {
+                          showNoInternetSnackBar(context);
+                          return;
+                        }
                       if (_usernameController.text.trim().isEmpty ||
                           _passwordController.text.trim().isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(

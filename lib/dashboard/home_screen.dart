@@ -6,6 +6,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 import '../provider/commonviewmodel.dart';
 import '../session/shared_preferences.dart';
+import 'coursedetailscreen.dart';
 import 'profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -156,68 +157,83 @@ class _HomeScreenState extends State<HomeScreen> {
                               courses.allcourselist.length,
                               (index) {
                                 final coursedata = courses.allcourselist[index];
-                                return Card(
-                                  color: Colors.white,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Column(
-                                      children: [
-                                        // ClipRRect(
-                                        //   borderRadius:
-                                        //       BorderRadius.circular(15),
-                                        //   child: FadeInImage.assetNetwork(
-                                        //     placeholder:
-                                        //         'assets/images/gif.gif', // Your GIF file in assets
-                                        //     image: coursedata.courseimage
-                                        //         .toString(),
-                                        //     fit: BoxFit.cover,
-                                        //   ),
-                                        // ),
-                                        ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                          child: CachedNetworkImage(
-                                            imageUrl: coursedata.courseimage
-                                                .toString(),
-                                            placeholder: (context, url) =>
-                                                Image.asset(
-                                                    'assets/images/gif.gif',
-                                                    fit: BoxFit.cover),
-                                            fadeInDuration: Duration(
-                                                milliseconds:
-                                                    300), // Optional fade-in effect
-                                            fit: BoxFit.cover,
-                                            errorWidget:
-                                                (context, url, error) =>
-                                                    Icon(Icons.error),
+                                return InkWell(
+                                  onTap: () {
+                                      Navigator.push(context, MaterialPageRoute(
+                                      builder: (context) {
+                                        return coursedetailsscreen(
+                                          coursedata: coursedata,
+                                          apple: courses.apple,
+                                           android: courses.android,
+
+                                        
+                                        );
+                                      },
+                                    ));
+                                  },
+                                  child: Card(
+                                    color: Colors.white,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Column(
+                                        children: [
+                                          // ClipRRect(
+                                          //   borderRadius:
+                                          //       BorderRadius.circular(15),
+                                          //   child: FadeInImage.assetNetwork(
+                                          //     placeholder:
+                                          //         'assets/images/gif.gif', // Your GIF file in assets
+                                          //     image: coursedata.courseimage
+                                          //         .toString(),
+                                          //     fit: BoxFit.cover,
+                                          //   ),
+                                          // ),
+                                          ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                            child: CachedNetworkImage(
+                                              imageUrl: coursedata.courseimage
+                                                  .toString(),
+                                              placeholder: (context, url) =>
+                                                  Image.asset(
+                                                      'assets/images/gif.gif',
+                                                      fit: BoxFit.cover),
+                                              fadeInDuration: Duration(
+                                                  milliseconds:
+                                                      300), // Optional fade-in effect
+                                              fit: BoxFit.cover,
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      Icon(Icons.error),
+                                            ),
                                           ),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          coursedata.coursename.toString(),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black),
-                                        ),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-                                        Text(
-                                          coursedata.description.toString(),
-                                          maxLines: 3,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(
-                                              fontSize: 10,
-                                              height: 1,
-                                              fontWeight: FontWeight.normal,
-                                              color: Colors.grey),
-                                        ),
-                                      ],
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Text(
+                                            coursedata.coursename.toString(),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black),
+                                          ),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(
+                                            coursedata.description.toString(),
+                                            maxLines: 3,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                                fontSize: 10,
+                                                height: 1,
+                                                fontWeight: FontWeight.normal,
+                                                color: Colors.grey),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 );

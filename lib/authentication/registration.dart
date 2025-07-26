@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
+import '../InternetHelper/internethelper.dart';
 import '../provider/commonviewmodel.dart';
 import '../session/shared_preferences.dart';
 
@@ -150,10 +151,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: isloading
-              ? CircularProgressIndicator()
+              ? Center(child: CircularProgressIndicator())
               : InkWell(
                   borderRadius: BorderRadius.circular(20),
-                  onTap: () {
+                  onTap: () async {
+                      bool connected = await isConnectedToInternet();
+
+                        if (!connected) {
+                          showNoInternetSnackBar(context);
+                          return;
+                        }
                     if (_nameController.text.trim().isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(

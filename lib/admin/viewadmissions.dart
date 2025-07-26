@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import '../InternetHelper/internethelper.dart';
 import '../provider/commonviewmodel.dart';
 
 class viewadmissions extends StatefulWidget {
@@ -225,6 +226,13 @@ class _viewadmissionsState extends State<viewadmissions> {
                                                       value: isActive,
                                                       onChanged:
                                                           (bool value) async {
+
+                                                              bool connected = await isConnectedToInternet();
+
+                        if (!connected) {
+                          showNoInternetSnackBar(context);
+                          return;
+                        }
                                                         await _showConfirmationDialog(
                                                           context,
                                                           coursedata
