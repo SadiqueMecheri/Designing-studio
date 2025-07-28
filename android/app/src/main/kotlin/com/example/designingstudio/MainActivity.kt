@@ -1,4 +1,4 @@
-package com.example.designingstudio
+package com.designingstudio.app
 
 import io.flutter.embedding.android.FlutterActivity
 
