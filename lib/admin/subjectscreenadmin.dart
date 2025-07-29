@@ -88,311 +88,321 @@ class _CourseScreenState extends State<SubjectScreenAdmin> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            MaterialButton(
-              height: 45,
-              minWidth: 45,
-              color: primaycolor,
-              shape: const CircleBorder(),
-              elevation: 4,
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Icon(
-                Icons.keyboard_arrow_left_outlined,
-                color: Colors.black,
-                size: 24,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              MaterialButton(
+                height: 45,
+                minWidth: 45,
+                color: primaycolor,
+                shape: const CircleBorder(),
+                elevation: 4,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Icon(
+                  Icons.keyboard_arrow_left_outlined,
+                  color: Colors.black,
+                  size: 24,
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    widget.coursename,
-                    style: TextStyle(
-                        fontSize: getetrabigFontSize(context),
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                        letterSpacing: 0),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Consumer<CommonViewModel>(builder: (context, courses, child) {
-                    if (courses.fetchmyunionlyloadingadmin == true) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else {
-                      return courses.myunitonlylistadmin.length == 0
-                          ? const Center(
-                              child: Text(
-                              "No class found",
-                              style:
-                                  TextStyle(fontSize: 15, color: Colors.black),
-                            ))
-                          : Column(
-                              children: List.generate(
-                                courses.myunitonlylistadmin.length,
-                                (index) {
-                                  final coursedata =
-                                      courses.myunitonlylistadmin[index];
-                                  bool isActive = coursedata.isactive == 1;
-                                  return Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      InkWell(
-                                        onTap: () {},
-                                        child: Card(
-                                          color: Color(0xffff8f9fe),
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 10, right: 10),
-                                            child: Column(
-                                              children: [
-                                                ListTile(
-                                                  contentPadding:
-                                                      EdgeInsets.all(0),
-                                                  leading: CircleAvatar(
-                                                    radius: 13,
-                                                    backgroundColor:
-                                                        Colors.black,
-                                                    child: Text(
-                                                      (index + 1).toString(),
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      widget.coursename,
+                      style: TextStyle(
+                          fontSize: getetrabigFontSize(context),
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                          letterSpacing: 0),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Consumer<CommonViewModel>(
+                        builder: (context, courses, child) {
+                      if (courses.fetchmyunionlyloadingadmin == true) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        return courses.myunitonlylistadmin.length == 0
+                            ? const Center(
+                                child: Text(
+                                "No class found",
+                                style: TextStyle(
+                                    fontSize: 15, color: Colors.black),
+                              ))
+                            : Column(
+                                children: List.generate(
+                                  courses.myunitonlylistadmin.length,
+                                  (index) {
+                                    final coursedata =
+                                        courses.myunitonlylistadmin[index];
+                                    bool isActive = coursedata.isactive == 1;
+                                    return Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        InkWell(
+                                          onTap: () {},
+                                          child: Card(
+                                            color: Color(0xffff8f9fe),
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 10, right: 10),
+                                              child: Column(
+                                                children: [
+                                                  ListTile(
+                                                    contentPadding:
+                                                        EdgeInsets.all(0),
+                                                    leading: CircleAvatar(
+                                                      radius: 13,
+                                                      backgroundColor:
+                                                          Colors.black,
+                                                      child: Text(
+                                                        (index + 1).toString(),
+                                                        style: TextStyle(
+                                                            fontSize: 11,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                    ),
+                                                    title: Text(
+                                                      coursedata.title
+                                                          .toString(),
                                                       style: TextStyle(
-                                                          fontSize: 11,
+                                                          fontSize: 13,
                                                           fontWeight:
                                                               FontWeight.bold,
-                                                          color: Colors.white),
+                                                          color: Colors.black),
                                                     ),
-                                                  ),
-                                                  title: Text(
-                                                    coursedata.title.toString(),
-                                                    style: TextStyle(
-                                                        fontSize: 13,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: Colors.black),
-                                                  ),
-                                                  trailing: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: [
-                                                      Transform.scale(
-                                                        scale: 0.5, //
-                                                        child: Switch(
-                                                          value: isActive,
-                                                          onChanged: (bool
-                                                              value) async {
-                                                            await _showConfirmationDialog(
-                                                              context,
-                                                              coursedata
-                                                                  .isactive!,
-                                                              (confirmedValue) {
-                                                                if (confirmedValue !=
-                                                                    null) {
-                                                                  // Call your API to update the status here
-                                                                  vm!.updateclassstatus(
-                                                                      confirmedValue
-                                                                          ? 1
-                                                                          : 0,
-                                                                      coursedata
-                                                                          .id!);
-                                                                  setState(() {
-                                                                    coursedata
-                                                                            .isactive =
+                                                    trailing: Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        Transform.scale(
+                                                          scale: 0.5, //
+                                                          child: Switch(
+                                                            value: isActive,
+                                                            onChanged: (bool
+                                                                value) async {
+                                                              await _showConfirmationDialog(
+                                                                context,
+                                                                coursedata
+                                                                    .isactive!,
+                                                                (confirmedValue) {
+                                                                  if (confirmedValue !=
+                                                                      null) {
+                                                                    // Call your API to update the status here
+                                                                    vm!.updateclassstatus(
                                                                         confirmedValue
                                                                             ? 1
-                                                                            : 0;
-                                                                  });
-                                                                }
-                                                              },
-                                                            );
-                                                          },
-                                                          activeColor:
-                                                              Colors.green,
-                                                          activeTrackColor:
-                                                              Colors.green[200],
-                                                          inactiveThumbColor:
-                                                              Colors.grey,
-                                                          inactiveTrackColor:
-                                                              Colors.grey[300],
-                                                        ),
-                                                      ),
-                                                      GestureDetector(
-                                                        onTap: () {
-                                                          Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                            builder: (context) {
-                                                              return AddClass(
-                                                                coursedata:
-                                                                    coursedata,
-                                                                from: 1,
-                                                                courseid: widget
-                                                                    .courseid,
-                                                              );
-                                                            },
-                                                          ));
-                                                        },
-                                                        child: Container(
-                                                          width: 20,
-                                                          height: 20,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: primaycolor,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        20), // Half of width/height for perfect circle
-                                                          ),
-                                                          child: const Icon(
-                                                            Icons.edit,
-                                                            size: 14,
-                                                            color: Colors
-                                                                .black, // You can change the icon color
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        width: 5,
-                                                      ),
-                                                      GestureDetector(
-                                                        onTap: () {
-                                                          showDialog(
-                                                            context: context,
-                                                            builder:
-                                                                (BuildContext
-                                                                    context) {
-                                                              return CupertinoAlertDialog(
-                                                                title: const Text(
-                                                                    "Confirm Delete"),
-                                                                content: const Text(
-                                                                    "Are you sure you want to delete this item?"),
-                                                                actions: [
-                                                                  TextButton(
-                                                                    onPressed:
+                                                                            : 0,
+                                                                        coursedata
+                                                                            .id!);
+                                                                    setState(
                                                                         () {
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .pop(); // Close the dialog
-                                                                    },
-                                                                    child: const Text(
-                                                                        "Cancel"),
-                                                                  ),
-                                                                  TextButton(
-                                                                    onPressed:
-                                                                        () async {
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .pop(); // Close the dialog
-                                                                      await _deleteItem(
-                                                                          coursedata
-                                                                              .id!); // Call your API function
-                                                                    },
-                                                                    child: const Text(
-                                                                        "Delete"),
-                                                                  ),
-                                                                ],
+                                                                      coursedata
+                                                                              .isactive =
+                                                                          confirmedValue
+                                                                              ? 1
+                                                                              : 0;
+                                                                    });
+                                                                  }
+                                                                },
                                                               );
                                                             },
-                                                          );
-                                                        },
-                                                        child: Container(
-                                                          width: 20,
-                                                          height: 20,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: primaycolor,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        20), // Half of width/height for perfect circle
-                                                          ),
-                                                          child: const Icon(
-                                                            Icons.delete,
-                                                            size: 14,
-                                                            color: Colors
-                                                                .black, // You can change the icon color
+                                                            activeColor:
+                                                                Colors.green,
+                                                            activeTrackColor:
+                                                                Colors
+                                                                    .green[200],
+                                                            inactiveThumbColor:
+                                                                Colors.grey,
+                                                            inactiveTrackColor:
+                                                                Colors
+                                                                    .grey[300],
                                                           ),
                                                         ),
-                                                      ),
-                                                      // Spacer(),
-
-                                                      IconButton(
-                                                          onPressed: () {
+                                                        GestureDetector(
+                                                          onTap: () {
                                                             Navigator.push(
                                                                 context,
                                                                 MaterialPageRoute(
                                                               builder:
                                                                   (context) {
-                                                                return ytplayer(
-                                                                  videolink:
-                                                                      coursedata
-                                                                          .ytlink!,
-                                                                  videoTitle:
-                                                                      coursedata
-                                                                          .title!,
-                                                                  videoDescription:
-                                                                      coursedata
-                                                                          .description!,
-                                                                  // youtubeurl:
-                                                                  //     coursedata
-                                                                  //         .ytlink!,
+                                                                return AddClass(
+                                                                  coursedata:
+                                                                      coursedata,
+                                                                  from: 1,
+                                                                  courseid: widget
+                                                                      .courseid,
                                                                 );
                                                               },
                                                             ));
                                                           },
-                                                          icon: Icon(
-                                                            Icons.play_circle,
-                                                            size: 30,
-                                                            color: Colors.black,
-                                                          )),
-                                                    ],
+                                                          child: Container(
+                                                            width: 20,
+                                                            height: 20,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color:
+                                                                  primaycolor,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          20), // Half of width/height for perfect circle
+                                                            ),
+                                                            child: const Icon(
+                                                              Icons.edit,
+                                                              size: 14,
+                                                              color: Colors
+                                                                  .black, // You can change the icon color
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 5,
+                                                        ),
+                                                        GestureDetector(
+                                                          onTap: () {
+                                                            showDialog(
+                                                              context: context,
+                                                              builder:
+                                                                  (BuildContext
+                                                                      context) {
+                                                                return CupertinoAlertDialog(
+                                                                  title: const Text(
+                                                                      "Confirm Delete"),
+                                                                  content:
+                                                                      const Text(
+                                                                          "Are you sure you want to delete this item?"),
+                                                                  actions: [
+                                                                    TextButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                        Navigator.of(context)
+                                                                            .pop(); // Close the dialog
+                                                                      },
+                                                                      child: const Text(
+                                                                          "Cancel"),
+                                                                    ),
+                                                                    TextButton(
+                                                                      onPressed:
+                                                                          () async {
+                                                                        Navigator.of(context)
+                                                                            .pop(); // Close the dialog
+                                                                        await _deleteItem(
+                                                                            coursedata.id!); // Call your API function
+                                                                      },
+                                                                      child: const Text(
+                                                                          "Delete"),
+                                                                    ),
+                                                                  ],
+                                                                );
+                                                              },
+                                                            );
+                                                          },
+                                                          child: Container(
+                                                            width: 20,
+                                                            height: 20,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color:
+                                                                  primaycolor,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          20), // Half of width/height for perfect circle
+                                                            ),
+                                                            child: const Icon(
+                                                              Icons.delete,
+                                                              size: 14,
+                                                              color: Colors
+                                                                  .black, // You can change the icon color
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        // Spacer(),
+
+                                                        IconButton(
+                                                            onPressed: () {
+                                                              Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                builder:
+                                                                    (context) {
+                                                                  return ytplayer(
+                                                                    videolink:
+                                                                        coursedata
+                                                                            .ytlink!,
+                                                                    videoTitle:
+                                                                        coursedata
+                                                                            .title!,
+                                                                    videoDescription:
+                                                                        coursedata
+                                                                            .description!,
+                                                                    // youtubeurl:
+                                                                    //     coursedata
+                                                                    //         .ytlink!,
+                                                                  );
+                                                                },
+                                                              ));
+                                                            },
+                                                            icon: Icon(
+                                                              Icons.play_circle,
+                                                              size: 30,
+                                                              color:
+                                                                  Colors.black,
+                                                            )),
+                                                      ],
+                                                    ),
                                                   ),
-                                                ),
-                                                Text(
-                                                  coursedata.description
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                      fontSize: 11,
-                                                      fontWeight:
-                                                          FontWeight.normal,
-                                                      color: Colors.black),
-                                                ),
-                                                SizedBox(
-                                                  height: 15,
-                                                ),
-                                              ],
+                                                  Text(
+                                                    coursedata.description
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                        fontSize: 11,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        color: Colors.black),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 15,
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                      SizedBox(
-                                        height: 15,
-                                      ),
-                                    ],
-                                  );
-                                },
-                              ),
-                            );
-                    }
-                  })
-                ],
-              ),
-            )
-          ],
+                                        SizedBox(
+                                          height: 15,
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              );
+                      }
+                    })
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -438,7 +448,7 @@ class _CourseScreenState extends State<SubjectScreenAdmin> {
 
         Navigator.of(context).pop(); // Close loading indicator
         if (vm!.responsedata.success == 1) {
-         vm!.fetchmyunitonlyforamin(widget.courseid);
+          vm!.fetchmyunitonlyforamin(widget.courseid);
         } else {
           // log("registration failed");
           ScaffoldMessenger.of(context).showSnackBar(

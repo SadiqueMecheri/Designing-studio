@@ -89,158 +89,160 @@ class _CourseScreenState extends State<SubjectScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            MaterialButton(
-              height: 45,
-              minWidth: 45,
-              color: primaycolor,
-              shape: const CircleBorder(),
-              elevation: 4,
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Icon(
-                Icons.keyboard_arrow_left_outlined,
-                color: Colors.black,
-                size: 24,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              MaterialButton(
+                height: 45,
+                minWidth: 45,
+                color: primaycolor,
+                shape: const CircleBorder(),
+                elevation: 4,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Icon(
+                  Icons.keyboard_arrow_left_outlined,
+                  color: Colors.black,
+                  size: 24,
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    widget.coursename,
-                    style: TextStyle(
-                        fontSize: getetrabigFontSize(context),
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                        letterSpacing: 0),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Consumer<CommonViewModel>(builder: (context, courses, child) {
-                    if (courses.fetchmyunionlyloading == true) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else {
-                      return courses.myunitonlylist.length == 0
-                          ? const Center(
-                              child: Text(
-                              "No class found",
-                              style:
-                                  TextStyle(fontSize: 15, color: Colors.black),
-                            ))
-                          : Column(
-                              children: List.generate(
-                                courses.myunitonlylist.length,
-                                (index) {
-                                  final videoDates = _calculateVideoDates(
-                                      courses.myunitonlylist.length);
-                                  final videoDate = videoDates[index];
-                                  final isToday = _isToday(videoDate);
-
-                                  final coursedata =
-                                      courses.myunitonlylist[index];
-                                  return Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      // Text(
-                                      //   // "Today",
-                                      //      _formatDate(videoDate),
-                                      //   style: TextStyle(fontSize: 13),
-                                      // ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      InkWell(
-                                        onTap: () {
-                                          Navigator.push(context,
-                                              MaterialPageRoute(
-                                            builder: (context) {
-                                              return ytplayer(
-                                                videolink: coursedata.ytlink!,
-                                                videoTitle: coursedata.title!,
-                                               videoDescription:
-                                                  coursedata.description!,
-                                                // youtubeurl: coursedata.ytlink!,
-                                              );
-                                            },
-                                          ));
-
-                                          // Navigator.push(context,
-                                          //     MaterialPageRoute(
-                                          //   builder: (context) {
-                                          //     return VideoPlayerPage(
-                                          //       videoUrl: coursedata.ytlink!,
-                                          //       videoTitle: coursedata.title!,
-                                          //       videoDescription:
-                                          //           coursedata.description!,
-                                          //       youtubeurl: coursedata.ytlink!,
-                                          //     );
-                                          //   },
-                                          // ));
-                                        },
-                                        child: Card(
-                                          color: Color(0xffff8f9fe),
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 10, right: 10),
-                                            child: ListTile(
-                                              contentPadding: EdgeInsets.all(0),
-                                              leading: CircleAvatar(
-                                                radius: 18,
-                                                backgroundColor: Colors.black,
-                                                child: Text(
-                                                  (index + 1).toString(),
-                                                  style: TextStyle(
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.white),
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      widget.coursename,
+                      style: TextStyle(
+                          fontSize: getetrabigFontSize(context),
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                          letterSpacing: 0),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Consumer<CommonViewModel>(builder: (context, courses, child) {
+                      if (courses.fetchmyunionlyloading == true) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        return courses.myunitonlylist.length == 0
+                            ? const Center(
+                                child: Text(
+                                "No class found",
+                                style:
+                                    TextStyle(fontSize: 15, color: Colors.black),
+                              ))
+                            : Column(
+                                children: List.generate(
+                                  courses.myunitonlylist.length,
+                                  (index) {
+                                    final videoDates = _calculateVideoDates(
+                                        courses.myunitonlylist.length);
+                                    final videoDate = videoDates[index];
+                                    final isToday = _isToday(videoDate);
+                
+                                    final coursedata =
+                                        courses.myunitonlylist[index];
+                                    return Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        // Text(
+                                        //   // "Today",
+                                        //      _formatDate(videoDate),
+                                        //   style: TextStyle(fontSize: 13),
+                                        // ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        InkWell(
+                                          onTap: () {
+                                            Navigator.push(context,
+                                                MaterialPageRoute(
+                                              builder: (context) {
+                                                return ytplayer(
+                                                  videolink: coursedata.ytlink!,
+                                                  videoTitle: coursedata.title!,
+                                                 videoDescription:
+                                                    coursedata.description!,
+                                                  // youtubeurl: coursedata.ytlink!,
+                                                );
+                                              },
+                                            ));
+                
+                                            // Navigator.push(context,
+                                            //     MaterialPageRoute(
+                                            //   builder: (context) {
+                                            //     return VideoPlayerPage(
+                                            //       videoUrl: coursedata.ytlink!,
+                                            //       videoTitle: coursedata.title!,
+                                            //       videoDescription:
+                                            //           coursedata.description!,
+                                            //       youtubeurl: coursedata.ytlink!,
+                                            //     );
+                                            //   },
+                                            // ));
+                                          },
+                                          child: Card(
+                                            color: Color(0xffff8f9fe),
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 10, right: 10),
+                                              child: ListTile(
+                                                contentPadding: EdgeInsets.all(0),
+                                                leading: CircleAvatar(
+                                                  radius: 18,
+                                                  backgroundColor: Colors.black,
+                                                  child: Text(
+                                                    (index + 1).toString(),
+                                                    style: TextStyle(
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.white),
+                                                  ),
                                                 ),
+                                                title: Text(
+                                                  coursedata.title.toString(),
+                                                  style: TextStyle(
+                                                      fontSize: 13,
+                                                      fontWeight: FontWeight.bold,
+                                                      color: Colors.black),
+                                                ),
+                                                trailing: IconButton(
+                                                    onPressed: () {},
+                                                    icon: Icon(
+                                                      Icons.play_circle,
+                                                      size: 30,
+                                                      color: Colors.black,
+                                                    )),
                                               ),
-                                              title: Text(
-                                                coursedata.title.toString(),
-                                                style: TextStyle(
-                                                    fontSize: 13,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.black),
-                                              ),
-                                              trailing: IconButton(
-                                                  onPressed: () {},
-                                                  icon: Icon(
-                                                    Icons.play_circle,
-                                                    size: 30,
-                                                    color: Colors.black,
-                                                  )),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                      SizedBox(
-                                        height: 15,
-                                      ),
-                                    ],
-                                  );
-                                },
-                              ),
-                            );
-                    }
-                  })
-                ],
-              ),
-            )
-          ],
+                                        SizedBox(
+                                          height: 15,
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              );
+                      }
+                    })
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
