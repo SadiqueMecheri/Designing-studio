@@ -5,6 +5,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../provider/commonviewmodel.dart';
+import 'player configuration/ytplayer.dart';
 import 'videoplayermobile.dart';
 
 class SubjectScreen extends StatefulWidget {
@@ -39,8 +40,7 @@ class _CourseScreenState extends State<SubjectScreen> {
     super.initState();
   }
 
-
-    // Helper function to format date
+  // Helper function to format date
   // Updated helper function to format date
   String _formatDate(DateTime date) {
     final now = DateTime.now();
@@ -56,27 +56,29 @@ class _CourseScreenState extends State<SubjectScreen> {
     } else if (dateToCheck == tomorrow) {
       return "Tomorrow";
     } else {
-      return DateFormat('d MMMM yyyy').format(date); // Formats like "10 July 2025"
+      return DateFormat('d MMMM yyyy')
+          .format(date); // Formats like "10 July 2025"
     }
   }
- bool _isToday(DateTime date) {
+
+  bool _isToday(DateTime date) {
     final now = DateTime.now();
-    return date.year == now.year && 
-           date.month == now.month && 
-           date.day == now.day;
+    return date.year == now.year &&
+        date.month == now.month &&
+        date.day == now.day;
   }
 
   // Helper function to calculate video dates
   List<DateTime> _calculateVideoDates(int videoCount) {
     final startDate = widget.batchstartdate;
     final dates = <DateTime>[];
-    
+
     // Calculate dates in reverse order (newest first)
     for (int i = 0; i < videoCount; i++) {
       // Subtract days to go backwards in time
       dates.add(startDate.subtract(Duration(days: videoCount - i - 1)));
     }
-    
+
     return dates.reversed.toList(); // Reverse to show oldest first
   }
 
@@ -141,9 +143,10 @@ class _CourseScreenState extends State<SubjectScreen> {
                               children: List.generate(
                                 courses.myunitonlylist.length,
                                 (index) {
-                                  final videoDates = _calculateVideoDates(courses.myunitonlylist.length);
+                                  final videoDates = _calculateVideoDates(
+                                      courses.myunitonlylist.length);
                                   final videoDate = videoDates[index];
-                                 final isToday = _isToday(videoDate);
+                                  final isToday = _isToday(videoDate);
 
                                   final coursedata =
                                       courses.myunitonlylist[index];
@@ -164,15 +167,28 @@ class _CourseScreenState extends State<SubjectScreen> {
                                           Navigator.push(context,
                                               MaterialPageRoute(
                                             builder: (context) {
-                                              return VideoPlayerPage(
-                                                videoUrl: coursedata.ytlink!,
+                                              return ytplayer(
+                                                videolink: coursedata.ytlink!,
                                                 videoTitle: coursedata.title!,
-                                                videoDescription:
-                                                    coursedata.description!,
-                                                youtubeurl: coursedata.ytlink!,
+                                               videoDescription:
+                                                  coursedata.description!,
+                                                // youtubeurl: coursedata.ytlink!,
                                               );
                                             },
                                           ));
+
+                                          // Navigator.push(context,
+                                          //     MaterialPageRoute(
+                                          //   builder: (context) {
+                                          //     return VideoPlayerPage(
+                                          //       videoUrl: coursedata.ytlink!,
+                                          //       videoTitle: coursedata.title!,
+                                          //       videoDescription:
+                                          //           coursedata.description!,
+                                          //       youtubeurl: coursedata.ytlink!,
+                                          //     );
+                                          //   },
+                                          // ));
                                         },
                                         child: Card(
                                           color: Color(0xffff8f9fe),

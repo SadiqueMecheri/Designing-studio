@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import '../dashboard/player configuration/ytplayer.dart';
 import '../dashboard/videoplayermobile.dart';
 import '../provider/commonviewmodel.dart';
 import 'addclass.dart';
@@ -336,8 +337,8 @@ class _CourseScreenState extends State<SubjectScreenAdmin> {
                                                                 MaterialPageRoute(
                                                               builder:
                                                                   (context) {
-                                                                return VideoPlayerPage(
-                                                                  videoUrl:
+                                                                return ytplayer(
+                                                                  videolink:
                                                                       coursedata
                                                                           .ytlink!,
                                                                   videoTitle:
@@ -346,9 +347,9 @@ class _CourseScreenState extends State<SubjectScreenAdmin> {
                                                                   videoDescription:
                                                                       coursedata
                                                                           .description!,
-                                                                  youtubeurl:
-                                                                      coursedata
-                                                                          .ytlink!,
+                                                                  // youtubeurl:
+                                                                  //     coursedata
+                                                                  //         .ytlink!,
                                                                 );
                                                               },
                                                             ));

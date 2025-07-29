@@ -46,6 +46,7 @@ dependencies:
   intl:
   connectivity_plus: ^6.1.4
   internet_connection_checker:
+  youtube_player_flutter: ^9.1.1
 
 dev_dependencies:
   flutter_test:

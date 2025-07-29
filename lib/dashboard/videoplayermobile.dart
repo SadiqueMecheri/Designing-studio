@@ -78,6 +78,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
       podPlayerConfig: const PodPlayerConfig(
         autoPlay: true,
         isLooping: false,
+        videoQualityPriority: [720, 480, 360],
       ),
     )..initialise().then((_) {
         setState(() => _isLoading = false);
@@ -168,12 +169,16 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                   SizedBox(
                     height: 10,
                   ),
+                  _isLoading
+                        ? const Center(child: CircularProgressIndicator())
+                        : 
+                        
+                        //PodVideoPlayer(controller: controller),
                   // Video Player
                   AspectRatio(
-                    aspectRatio: 16 / 9,
-                    child: _isLoading
-                        ? const Center(child: CircularProgressIndicator())
-                        : PodVideoPlayer(controller: controller),
+                    aspectRatio: 9/16,
+                    child: PodVideoPlayer(
+                      controller: controller),
                   ),
 
                   // Video Details
