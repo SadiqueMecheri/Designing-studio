@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:designingstudio/contrains.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -341,11 +343,13 @@ class _RegistrationScreenState extends State<Addbatch> {
                             borderRadius: BorderRadius.circular(20),
                             onTap: () async {
 
+                        if(!Platform.isIOS){
                                 bool connected = await isConnectedToInternet();
 
                         if (!connected) {
                           showNoInternetSnackBar(context);
                           return;
+                        }
                         }
                               if (_selectedadta.text.trim().isEmpty ||
                                   selectedcourseId == null ||

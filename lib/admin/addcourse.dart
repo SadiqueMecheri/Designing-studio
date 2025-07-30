@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:designingstudio/admin/admindashboard.dart';
 import 'package:designingstudio/contrains.dart';
 import 'package:designingstudio/dashboard/dashboard.dart';
@@ -402,11 +404,14 @@ class _RegistrationScreenState extends State<AddCourse> {
                             borderRadius: BorderRadius.circular(20),
                             onTap: () async {
 
+
+                        if(!Platform.isIOS){
                                 bool connected = await isConnectedToInternet();
 
                         if (!connected) {
                           showNoInternetSnackBar(context);
                           return;
+                        }
                         }
                               if (_coursenameController.text.trim().isEmpty ||
                                   _descrController.text.trim().isEmpty ||

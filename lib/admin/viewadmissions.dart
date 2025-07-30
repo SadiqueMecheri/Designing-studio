@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -227,11 +229,13 @@ class _viewadmissionsState extends State<viewadmissions> {
                                                       onChanged:
                                                           (bool value) async {
 
+                        if(!Platform.isIOS){
                                                               bool connected = await isConnectedToInternet();
 
                         if (!connected) {
                           showNoInternetSnackBar(context);
                           return;
+                        }
                         }
                                                         await _showConfirmationDialog(
                                                           context,

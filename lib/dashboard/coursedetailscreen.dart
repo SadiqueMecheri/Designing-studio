@@ -95,13 +95,15 @@ class _coursedetailsscreenState extends State<coursedetailsscreen> {
                           ? Center(child: CircularProgressIndicator())
                           : InkWell(
                               onTap: () async {
+
+                        if(!Platform.isIOS){
                                 bool connected = await isConnectedToInternet();
 
                                 if (!connected) {
                                   showNoInternetSnackBar(context);
                                   return;
                                 }
-
+                        }
                                 // Show confirmation dialog
                                 bool confirm = await showDialog(
                                   context: context,
@@ -196,12 +198,15 @@ class _coursedetailsscreenState extends State<coursedetailsscreen> {
                           ? Center(child: CircularProgressIndicator())
                           : InkWell(
                               onTap: () async {
+
+                        if(!Platform.isIOS){
                                 bool connected = await isConnectedToInternet();
 
                                 if (!connected) {
                                   showNoInternetSnackBar(context);
                                   return;
                                 }
+                        }
 
                                 // Show confirmation dialog
                                 bool confirm = await showDialog(

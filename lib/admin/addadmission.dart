@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:designingstudio/contrains.dart';
 
@@ -387,12 +388,15 @@ class _RegistrationScreenState extends State<addadmissions> {
                         : InkWell(
                             borderRadius: BorderRadius.circular(20),
                             onTap: () async {
+                              
+                        if(!Platform.isIOS){
                               bool connected = await isConnectedToInternet();
 
                               if (!connected) {
                                 showNoInternetSnackBar(context);
                                 return;
                               }
+                        }
                               if (_namecontroller.text.trim().isEmpty ||
                                   _amountcontroller.text.trim().isEmpty ||
                                   selectedBatchId == null ||

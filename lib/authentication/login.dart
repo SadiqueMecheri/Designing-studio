@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:designingstudio/authentication/registration.dart';
 import 'package:designingstudio/contrains.dart';
@@ -203,12 +204,17 @@ class _LoginScreenState extends State<LoginScreen> {
                       shape: const CircleBorder(),
                       elevation: 4,
                       onPressed: () async {
+
+                        if(!Platform.isIOS){
+
+                       
                         bool connected = await isConnectedToInternet();
 
                         if (!connected) {
                           showNoInternetSnackBar(context);
                           return;
                         }
+                         }
                         if (fullPhoneNumber == null) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(

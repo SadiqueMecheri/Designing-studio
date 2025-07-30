@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:designingstudio/contrains.dart';
 import 'package:designingstudio/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
@@ -155,11 +157,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               : InkWell(
                   borderRadius: BorderRadius.circular(20),
                   onTap: () async {
+
+                        if(!Platform.isIOS){
                       bool connected = await isConnectedToInternet();
 
                         if (!connected) {
                           showNoInternetSnackBar(context);
                           return;
+                        }
                         }
                     if (_nameController.text.trim().isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
