@@ -9,7 +9,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
-import '../InternetHelper/internethelper.dart';
 import '../provider/commonviewmodel.dart';
 import '../session/shared_preferences.dart';
 
@@ -405,14 +404,14 @@ class _RegistrationScreenState extends State<AddCourse> {
                             onTap: () async {
 
 
-                        if(!Platform.isIOS){
-                                bool connected = await isConnectedToInternet();
+                        // if(!Platform.isIOS){
+                        //         bool connected = await isConnectedToInternet();
 
-                        if (!connected) {
-                          showNoInternetSnackBar(context);
-                          return;
-                        }
-                        }
+                        // if (!connected) {
+                        //   showNoInternetSnackBar(context);
+                        //   return;
+                        // }
+                        // }
                               if (_coursenameController.text.trim().isEmpty ||
                                   _descrController.text.trim().isEmpty ||
                                   _priceController.text.trim().isEmpty ||

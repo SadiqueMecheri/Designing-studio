@@ -9,7 +9,6 @@ import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:provider/provider.dart';
 
-import '../InternetHelper/internethelper.dart';
 import '../admin/loginpageadmin.dart';
 import '../dashboard/dashboard.dart';
 import '../provider/commonviewmodel.dart';
@@ -205,16 +204,16 @@ class _LoginScreenState extends State<LoginScreen> {
                       elevation: 4,
                       onPressed: () async {
 
-                        if(!Platform.isIOS){
+                        // if(!Platform.isIOS){
 
                        
-                        bool connected = await isConnectedToInternet();
+                        // bool connected = await isConnectedToInternet();
 
-                        if (!connected) {
-                          showNoInternetSnackBar(context);
-                          return;
-                        }
-                         }
+                        // if (!connected) {
+                        //   showNoInternetSnackBar(context);
+                        //   return;
+                        // }
+                        //  }
                         if (fullPhoneNumber == null) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(

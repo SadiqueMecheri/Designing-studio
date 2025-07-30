@@ -10,7 +10,6 @@ import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:provider/provider.dart';
 
-import '../InternetHelper/internethelper.dart';
 import '../provider/commonviewmodel.dart';
 
 class addadmissions extends StatefulWidget {
@@ -389,14 +388,14 @@ class _RegistrationScreenState extends State<addadmissions> {
                             borderRadius: BorderRadius.circular(20),
                             onTap: () async {
                               
-                        if(!Platform.isIOS){
-                              bool connected = await isConnectedToInternet();
+                        // if(!Platform.isIOS){
+                        //       bool connected = await isConnectedToInternet();
 
-                              if (!connected) {
-                                showNoInternetSnackBar(context);
-                                return;
-                              }
-                        }
+                        //       if (!connected) {
+                        //         showNoInternetSnackBar(context);
+                        //         return;
+                        //       }
+                        // }
                               if (_namecontroller.text.trim().isEmpty ||
                                   _amountcontroller.text.trim().isEmpty ||
                                   selectedBatchId == null ||

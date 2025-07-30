@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import '../InternetHelper/internethelper.dart';
 import '../provider/commonviewmodel.dart';
 import '../session/shared_preferences.dart';
 import 'admindashboard.dart';
@@ -238,14 +237,7 @@ class _LoginScreenState extends State<LoginPageAdmin> {
                   borderRadius: BorderRadius.circular(20),
                   onTap: () async {
 
-                        if(!Platform.isIOS){
-                    bool connected = await isConnectedToInternet();
-    
-                    if (!connected) {
-                      showNoInternetSnackBar(context);
-                      return;
-                    }
-                        }
+                     
                     if (_usernameController.text.trim().isEmpty ||
                         _passwordController.text.trim().isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(

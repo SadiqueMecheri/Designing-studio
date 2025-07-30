@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../InternetHelper/internethelper.dart';
 import '../contrains.dart';
 import '../provider/commonviewmodel.dart';
 import '../session/shared_preferences.dart';
@@ -96,14 +95,7 @@ class _coursedetailsscreenState extends State<coursedetailsscreen> {
                           : InkWell(
                               onTap: () async {
 
-                        if(!Platform.isIOS){
-                                bool connected = await isConnectedToInternet();
-
-                                if (!connected) {
-                                  showNoInternetSnackBar(context);
-                                  return;
-                                }
-                        }
+                       
                                 // Show confirmation dialog
                                 bool confirm = await showDialog(
                                   context: context,
@@ -199,14 +191,7 @@ class _coursedetailsscreenState extends State<coursedetailsscreen> {
                           : InkWell(
                               onTap: () async {
 
-                        if(!Platform.isIOS){
-                                bool connected = await isConnectedToInternet();
-
-                                if (!connected) {
-                                  showNoInternetSnackBar(context);
-                                  return;
-                                }
-                        }
+                    
 
                                 // Show confirmation dialog
                                 bool confirm = await showDialog(
