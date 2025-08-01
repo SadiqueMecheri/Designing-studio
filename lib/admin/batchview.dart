@@ -22,11 +22,23 @@ class _viewadmissionsState extends State<batchview> {
   TextEditingController serchcontroller = TextEditingController();
   List<dynamic> filteredAdmissions = [];
 
+  String? selectedCourse; // To track selected course filter
+  List<String> courseList = ['All']; // Initialize with 'All' option
+
   @override
   void initState() {
     vm = Provider.of<CommonViewModel>(context, listen: false);
 
-    vm!.ftechbatch();
+    vm!.ftechbatch().then((_) {
+      // Extract unique course names after data is loaded
+      final courses = vm!.alladmisonlist
+          .map((a) => a.coursename.toString())
+          .toSet()
+          .toList();
+      setState(() {
+        courseList = ['All']..addAll(courses);
+      });
+    });
 
     super.initState();
   }
@@ -44,331 +56,406 @@ class _viewadmissionsState extends State<batchview> {
     super.dispose();
   }
 
-  // Add this method to filter admissions
-  void filterAdmissions(String query) {
+  // // Add this method to filter admissions
+  // void filterAdmissions(String query) {
+  //   setState(() {
+  //     filteredAdmissions = vm!.batchlist.where((admission) {
+  //       final name = admission.batchname.toString().toLowerCase();
+  //       final searchLower = query.toLowerCase();
+
+  //       return name.contains(searchLower);
+  //     }).toList();
+  //   });
+  // }
+
+  void filterAdmissions() {
     setState(() {
       filteredAdmissions = vm!.batchlist.where((admission) {
-        final name = admission.batchname.toString().toLowerCase();
-        final searchLower = query.toLowerCase();
+        // Apply search filter
+        final searchQuery = serchcontroller.text.toLowerCase();
+        final matchesSearch = searchQuery.isEmpty ||
+            admission.batchname.toString().toLowerCase().contains(searchQuery);
 
-        return name.contains(searchLower);
+        // Apply course filter
+        final matchesCourse = selectedCourse == null ||
+            selectedCourse == 'All' ||
+            admission.course_name == selectedCourse;
+
+        return matchesSearch && matchesCourse;
       }).toList();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xffff8f9fe),
-      body: SafeArea(
-          child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Batches",
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black),
-                  ),
-                  Consumer<CommonViewModel>(builder: (context, courses, child) {
-                    if (courses.fetchbatchloading == true) {
-                      return Text(
-                        "Loading",
-                        style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.normal,
-                            color: Colors.black),
-                      );
-                    } else {
-                      return Text(
-                        "${courses.batchlist.length}",
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.black),
-                      );
-                    }
-                  }),
-                ],
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              TextField(
-                controller: serchcontroller,
-                autofocus: false,
-                cursorColor: Colors.black,
-                keyboardType: TextInputType.text, // Changed from phone to text
-                style: TextStyle(
-                  fontSize: 15.0 / MediaQuery.textScaleFactorOf(context),
-                  color: Colors.black,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Color(0xffff8f9fe),
+        body: SafeArea(
+            child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 20,
                 ),
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.grey.shade100,
-                  prefixIcon: CircleAvatar(
-                    radius: 12,
-                    backgroundColor:
-                        Colors.transparent, // or your preferred background
-                    child: Padding(
-                      padding:
-                          EdgeInsets.all(4), // Adjust padding to control size
-                      child: Image.asset(
-                        "assets/images/search.png",
-                        fit: BoxFit.contain,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Batches",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
+                    ),
+                    Consumer<CommonViewModel>(
+                        builder: (context, courses, child) {
+                      if (courses.fetchbatchloading == true) {
+                        return Text(
+                          "Loading",
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.normal,
+                              color: Colors.black),
+                        );
+                      } else {
+                        return Row(
+                          mainAxisSize:
+                              MainAxisSize.min, // Keep Row as small as possible
+                          children: [
+                            IntrinsicWidth(
+                              child: DropdownButton<String>(
+                                value: selectedCourse ?? 'All',
+                                underline: Container(), // No underline
+                                isDense: true, // Minimize padding
+                                isExpanded:
+                                    false, // Prevent stretching to full width
+                                icon: Icon(Icons.arrow_drop_down,
+                                    color: Colors.black),
+                                alignment: AlignmentDirectional
+                                    .centerEnd, // Align dropdown content to the right
+                                items: courseList.map((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(
+                                      value,
+                                      style: TextStyle(fontSize: 14),
+                                      overflow: TextOverflow
+                                          .ellipsis, // Handle long text
+                                    ),
+                                  );
+                                }).toList(),
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    selectedCourse = newValue;
+                                    filterAdmissions();
+                                  });
+                                },
+                              ),
+                            ),
+                            SizedBox(width: 10),
+                            Text(
+                              "${serchcontroller.text.isEmpty && (selectedCourse == null || selectedCourse == 'All') ? courses.batchlist.length : filteredAdmissions.length}",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        );
+                      }
+                    }),
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                TextField(
+                  controller: serchcontroller,
+                  autofocus: false,
+                  cursorColor: Colors.black,
+                  keyboardType:
+                      TextInputType.text, // Changed from phone to text
+                  style: TextStyle(
+                    fontSize: 15.0 / MediaQuery.textScaleFactorOf(context),
+                    color: Colors.black,
+                  ),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.grey.shade100,
+                    prefixIcon: CircleAvatar(
+                      radius: 12,
+                      backgroundColor:
+                          Colors.transparent, // or your preferred background
+                      child: Padding(
+                        padding:
+                            EdgeInsets.all(4), // Adjust padding to control size
+                        child: Image.asset(
+                          "assets/images/search.png",
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
+                    prefixIconConstraints: BoxConstraints(
+                        minWidth: 40, minHeight: 0), // Adjust spacing
+                    hintText:
+                        "Search with batch name", // Changed from "Phone number"
+                    hintStyle: TextStyle(color: Colors.grey.shade400),
+                    errorStyle: TextStyle(
+                      fontSize: 15.0 / MediaQuery.textScaleFactorOf(context),
+                      color: Colors.red.shade900,
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 15),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: const BorderSide(color: Colors.white),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: const BorderSide(color: Colors.white),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    // Removed phone-specific decorations
                   ),
-                  prefixIconConstraints: BoxConstraints(
-                      minWidth: 40, minHeight: 0), // Adjust spacing
-                  hintText:
-                      "Search with batch name", // Changed from "Phone number"
-                  hintStyle: TextStyle(color: Colors.grey.shade400),
-                  errorStyle: TextStyle(
-                    fontSize: 15.0 / MediaQuery.textScaleFactorOf(context),
-                    color: Colors.red.shade900,
-                  ),
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  // Removed phone-specific decorations
+                  onChanged: (value) {
+                    filterAdmissions(); // Call filter function on text change
+                    // Handle text changes here
+                    // fullPhoneNumber = value; // Remove phone-specific handling
+                  },
                 ),
-                onChanged: (value) {
-                  filterAdmissions(
-                      value); // Call filter function on text change
-                  // Handle text changes here
-                  // fullPhoneNumber = value; // Remove phone-specific handling
-                },
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Consumer<CommonViewModel>(builder: (context, courses, child) {
-                if (courses.fetchbatchloading == true) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else {
-                  final displayList = serchcontroller.text.isEmpty
-                      ? courses.batchlist
-                      : filteredAdmissions;
-                  return displayList.length == 0
-                      ? Center(
-                          child: Text(
-                          serchcontroller.text.isEmpty
-                              ? "No Batches"
-                              : "No matching batches found",
-                          style: const TextStyle(
-                              fontSize: 15, color: Colors.black),
-                        ))
-                      : Column(
-                          children: List.generate(
-                            displayList.length,
-                            (index) {
-                              final coursedata = displayList[index];
-                              bool isActive = coursedata.isactive == 1;
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  InkWell(
-                                    onTap: () {},
-                                    child: Card(
-                                      color: Color(0xffff8f9fe),
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 10, right: 10),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            ListTile(
-                                              contentPadding: EdgeInsets.all(0),
-                                              leading: Text(
-                                                coursedata.batchname.toString(),
-                                                style: TextStyle(
-                                                    fontSize: 13,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.black),
-                                              ),
-                                              title: Text(
-                                                formatPurchaseDate(coursedata
-                                                        .startdate!
-                                                        .toString())
-                                                    .toString(),
-                                                style: TextStyle(
-                                                    fontSize: 13,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.black),
-                                              ),
-                                              trailing: Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  GestureDetector(
-                                                onTap: () {
-                                                  Navigator.push(context,
-                                                      MaterialPageRoute(
-                                                    builder: (context) {
-                                                      return Addbatch(
-                                                          coursedata: coursedata,
-                                                          from: 1);
-                                                    },
-                                                  ));
-                                                },
-                                                child: Container(
-                                                  width: 20,
-                                                  height: 20,
-                                                  decoration: BoxDecoration(
-                                                    color: primaycolor,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20), // Half of width/height for perfect circle
-                                                  ),
-                                                  child: const Icon(
-                                                    Icons.edit,
-                                                    size: 14,
-                                                    color: Colors
-                                                        .black, // You can change the icon color
-                                                  ),
+                SizedBox(
+                  height: 20,
+                ),
+                Consumer<CommonViewModel>(builder: (context, courses, child) {
+                  if (courses.fetchbatchloading == true) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else {
+                    final displayList =
+                    
+                    
+               (serchcontroller.text.isEmpty &&
+                          (selectedCourse == null || selectedCourse == 'All'))
+                        ? courses.batchlist
+                        : filteredAdmissions;
+                    return displayList.length == 0
+                        ? Center(
+                            child: Text(
+                           serchcontroller.text.isEmpty &&
+                                  (selectedCourse == null ||
+                                      selectedCourse == 'All')
+                                ? "No Batches"
+                                : "No matching batches found",
+                            style: const TextStyle(
+                                fontSize: 15, color: Colors.black),
+                          ))
+                        : Column(
+                            children: List.generate(
+                              displayList.length,
+                              (index) {
+                                final coursedata = displayList[index];
+                                bool isActive = coursedata.isactive == 1;
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    InkWell(
+                                      onTap: () {},
+                                      child: Card(
+                                        color: Color(0xffff8f9fe),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 10, right: 10),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              ListTile(
+                                                contentPadding:
+                                                    EdgeInsets.all(0),
+                                                leading: Text(
+                                                  coursedata.batchname
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                      fontSize: 13,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.black),
                                                 ),
-                                              ),
+                                                title: Text(
+                                                  formatPurchaseDate(coursedata
+                                                          .startdate!
+                                                          .toString())
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                      fontSize: 13,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.black),
+                                                ),
+                                                trailing: Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        Navigator.push(context,
+                                                            MaterialPageRoute(
+                                                          builder: (context) {
+                                                            return Addbatch(
+                                                                coursedata:
+                                                                    coursedata,
+                                                                from: 1);
+                                                          },
+                                                        ));
+                                                      },
+                                                      child: Container(
+                                                        width: 35,
+                                                        height: 35,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: primaycolor,
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  20), // Half of width/height for perfect circle
+                                                        ),
+                                                        child: const Icon(
+                                                          Icons.edit,
+                                                          size: 20,
+                                                          color: Colors
+                                                              .black, // You can change the icon color
+                                                        ),
+                                                      ),
+                                                    ),
 
+                                                    SizedBox(
+                                                      height: 10,
+                                                    ),
 
-
-
-
-                                                  Transform.scale(
-                                                    scale: 0.5, //
-                                                    child: Switch(
-                                                      value: isActive,
-                                                      onChanged:
-                                                          (bool value) async {
-
-                     
-                                                        await _showConfirmationDialog(
-                                                          context,
-                                                          coursedata.isactive!,
-                                                          (confirmedValue) {
-                                                            if (confirmedValue !=
-                                                                null) {
-                                                              // Call your API to update the status here
-                                                              vm!.updatebatchstaus(
-                                                                  confirmedValue
-                                                                      ? 1
-                                                                      : 0,
-                                                                  coursedata
-                                                                      .id!);
-                                                              setState(() {
-                                                                coursedata
-                                                                        .isactive =
+                                                    Transform.scale(
+                                                      scale: 0.8, //
+                                                      child: Switch(
+                                                        value: isActive,
+                                                        onChanged:
+                                                            (bool value) async {
+                                                          await _showConfirmationDialog(
+                                                            context,
+                                                            coursedata
+                                                                .isactive!,
+                                                            (confirmedValue) {
+                                                              if (confirmedValue !=
+                                                                  null) {
+                                                                // Call your API to update the status here
+                                                                vm!.updatebatchstaus(
                                                                     confirmedValue
                                                                         ? 1
-                                                                        : 0;
-                                                              });
-                                                            }
-                                                          },
-                                                        );
-                                                      },
-                                                      activeColor: Colors.green,
-                                                      activeTrackColor:
-                                                          Colors.green[200],
-                                                      inactiveThumbColor:
-                                                          Colors.grey,
-                                                      inactiveTrackColor:
-                                                          Colors.grey[300],
+                                                                        : 0,
+                                                                    coursedata
+                                                                        .id!);
+                                                                setState(() {
+                                                                  coursedata
+                                                                          .isactive =
+                                                                      confirmedValue
+                                                                          ? 1
+                                                                          : 0;
+                                                                });
+                                                              }
+                                                            },
+                                                          );
+                                                        },
+                                                        activeColor:
+                                                            Colors.green,
+                                                        activeTrackColor:
+                                                            Colors.green[200],
+                                                        inactiveThumbColor:
+                                                            Colors.grey,
+                                                        inactiveTrackColor:
+                                                            Colors.grey[300],
+                                                      ),
                                                     ),
-                                                  ),
 
-                                                  // Spacer(),
-                                                ],
+                                                    // Spacer(),
+                                                  ],
+                                                ),
                                               ),
-                                            ),
-                                            Text(
-                                              "${coursedata.studentCount} Students",
-                                              style: TextStyle(
-                                                  fontSize: 11,
-                                                  fontWeight: FontWeight.normal,
-                                                  color: Colors.black),
-                                            ),
-                                            SizedBox(
-                                              height: 15,
-                                            ),
-                                            Text(
-                                              "Course :${coursedata.course_name}",
-                                              style: TextStyle(
-                                                  fontSize: 11,
-                                                  fontWeight: FontWeight.normal,
-                                                  color: Colors.black),
-                                            ),
-                                            SizedBox(
-                                              height: 15,
-                                            ),
-                                            Text(
-                                              isActive
-                                                  ? "Status :Active"
-                                                  : "Status :Disabled",
-                                              style: TextStyle(
-                                                  fontSize: 11,
-                                                  fontWeight: FontWeight.normal,
-                                                  color: isActive
-                                                      ? Colors.green
-                                                      : Colors.red),
-                                            ),
-                                            SizedBox(
-                                              height: 15,
-                                            ),
-                                          ],
+                                              Text(
+                                                "${coursedata.studentCount} Students",
+                                                style: TextStyle(
+                                                    fontSize: 11,
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    color: Colors.black),
+                                              ),
+                                              SizedBox(
+                                                height: 15,
+                                              ),
+                                              Text(
+                                                "Course :${coursedata.course_name}",
+                                                style: TextStyle(
+                                                    fontSize: 11,
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    color: Colors.black),
+                                              ),
+                                              SizedBox(
+                                                height: 15,
+                                              ),
+                                              Text(
+                                                isActive
+                                                    ? "Status :Active"
+                                                    : "Status :Disabled",
+                                                style: TextStyle(
+                                                    fontSize: 11,
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    color: isActive
+                                                        ? Colors.green
+                                                        : Colors.red),
+                                              ),
+                                              SizedBox(
+                                                height: 15,
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: 15,
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                        );
-                }
-              })
-            ],
+                                    SizedBox(
+                                      height: 15,
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                          );
+                  }
+                })
+              ],
+            ),
           ),
+        )),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: primaycolor,
+          onPressed: () {
+            // Action to perform when button is pressed
+            Navigator.push(context, MaterialPageRoute(
+              builder: (context) {
+                return Addbatch(coursedata: null, from: 0);
+              },
+            ));
+            print('FAB pressed!');
+          },
+          child: Icon(Icons.add), // Icon for the button
+          tooltip: 'Add', // Text shown when long pressed
         ),
-      )),
-       floatingActionButton: FloatingActionButton(
-        backgroundColor: primaycolor,
-        onPressed: () {
-          // Action to perform when button is pressed
-          Navigator.push(context, MaterialPageRoute(
-            builder: (context) {
-              return Addbatch(coursedata: null, from: 0);
-            },
-          ));
-          print('FAB pressed!');
-        },
-        child: Icon(Icons.add), // Icon for the button
-        tooltip: 'Add', // Text shown when long pressed
       ),
     );
   }

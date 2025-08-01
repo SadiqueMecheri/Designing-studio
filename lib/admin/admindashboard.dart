@@ -22,7 +22,7 @@ class AdminDashboard extends StatefulWidget {
 
 class _DashboardState extends State<AdminDashboard> {
   int currentIndex = 0;
-    DateTime? currentBackPressTime;
+  DateTime? currentBackPressTime;
   @override
   void initState() {
     currentIndex = widget.selectIndex;
@@ -101,8 +101,7 @@ class _DashboardState extends State<AdminDashboard> {
     Container()
   ];
 
-
-   Future<bool> _onWillPop() async {
+  Future<bool> _onWillPop() async {
     if (currentIndex != 0) {
       setState(() {
         currentIndex = 0;
@@ -122,14 +121,13 @@ class _DashboardState extends State<AdminDashboard> {
       );
       return false;
     }
-     exit(0);
+    exit(0);
     //return true;
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return  WillPopScope(
+    return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
         backgroundColor: backgroundColor,
@@ -143,6 +141,8 @@ class _DashboardState extends State<AdminDashboard> {
             currentIndex: currentIndex,
             selectedFontSize: 12,
             unselectedFontSize: 10,
+            showSelectedLabels: true, // Add this
+            showUnselectedLabels: true,
             items: <BottomNavigationBarItem>[
               currentIndex == 0
                   ? BottomNavigationBarItem(

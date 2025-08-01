@@ -387,15 +387,14 @@ class _RegistrationScreenState extends State<addadmissions> {
                         : InkWell(
                             borderRadius: BorderRadius.circular(20),
                             onTap: () async {
-                              
-                        // if(!Platform.isIOS){
-                        //       bool connected = await isConnectedToInternet();
+                              // if(!Platform.isIOS){
+                              //       bool connected = await isConnectedToInternet();
 
-                        //       if (!connected) {
-                        //         showNoInternetSnackBar(context);
-                        //         return;
-                        //       }
-                        // }
+                              //       if (!connected) {
+                              //         showNoInternetSnackBar(context);
+                              //         return;
+                              //       }
+                              // }
                               if (_namecontroller.text.trim().isEmpty ||
                                   _amountcontroller.text.trim().isEmpty ||
                                   selectedBatchId == null ||
@@ -437,32 +436,45 @@ class _RegistrationScreenState extends State<addadmissions> {
                                       ),
                                     );
                                   } else {
-                                    selectedCourseid = null;
-                                    selectedBatchName = null;
-                                    selectedBatchId = null;
-                                    fullPhoneNumber = null;
-                                    _namecontroller.clear();
-                                    _amountcontroller.clear();
-                                    _phoneController.clear();
-                                    // Also clear your stored values if needed
-                                    fullPhoneNumber = '';
-                                    countrycode = '';
+                                    if (vm!.responsedata.message ==
+                                        "This student already in batch") {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                              "This student already in another batch with same course"),
+                                          duration: Duration(seconds: 2),
+                                        ),
+                                      );
+                                    } else {
+                                      selectedCourseid = null;
+                                      selectedBatchName = null;
+                                      selectedBatchId = null;
+                                      fullPhoneNumber = null;
+                                      _namecontroller.clear();
+                                      _amountcontroller.clear();
+                                      _phoneController.clear();
+                                      // Also clear your stored values if needed
+                                      fullPhoneNumber = '';
+                                      countrycode = '';
 
-                                    setState(() {});
+                                      setState(() {});
 
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                            'Admission Added Successfully'),
-                                        duration: Duration(seconds: 2),
-                                      ),
-                                    );
-                                    // Navigator.push(context, MaterialPageRoute(
-                                    //   builder: (context) {
-                                    //     return AdminDashboard(selectIndex: 0);
-                                    //   },
-                                    // ));
-                                    ///  vm!.fetchmyunitonlyforamin(widget.courseid);
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                              'Admission Added Successfully'),
+                                          duration: Duration(seconds: 2),
+                                        ),
+                                      );
+                                      // Navigator.push(context, MaterialPageRoute(
+                                      //   builder: (context) {
+                                      //     return AdminDashboard(selectIndex: 0);
+                                      //   },
+                                      // ));
+                                      ///  vm!.fetchmyunitonlyforamin(widget.courseid);
+                                    }
                                   } // Navigator.pop(context);
                                 } else {
                                   // log("registration failed");

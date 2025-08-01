@@ -20,10 +20,22 @@ class _viewadmissionsState extends State<viewadmissions> {
   TextEditingController serchcontroller = TextEditingController();
   List<dynamic> filteredAdmissions = [];
 
+  String? selectedCourse; // To track selected course filter
+  List<String> courseList = ['All']; // Initialize with 'All' option
+
   @override
   void initState() {
     vm = Provider.of<CommonViewModel>(context, listen: false);
-    vm!.getalladmissions();
+    vm!.getalladmissions().then((_) {
+      // Extract unique course names after data is loaded
+      final courses = vm!.alladmisonlist
+          .map((a) => a.coursename.toString())
+          .toSet()
+          .toList();
+      setState(() {
+        courseList = ['All']..addAll(courses);
+      });
+    });
 
     super.initState();
   }
@@ -35,22 +47,27 @@ class _viewadmissionsState extends State<viewadmissions> {
     return DateFormat('dd MMMM yyyy').format(dateTime);
   }
 
-
-    @override
+  @override
   void dispose() {
     serchcontroller.dispose();
     super.dispose();
   }
 
-   // Add this method to filter admissions
-  void filterAdmissions(String query) {
+  void filterAdmissions() {
     setState(() {
       filteredAdmissions = vm!.alladmisonlist.where((admission) {
-        final mobileNo = admission.mobileNo.toString().toLowerCase();
-        final name = admission.name.toString().toLowerCase();
-        final searchLower = query.toLowerCase();
-        
-        return mobileNo.contains(searchLower) || name.contains(searchLower);
+        // Apply search filter
+        final searchQuery = serchcontroller.text.toLowerCase();
+        final matchesSearch = searchQuery.isEmpty ||
+            admission.mobileNo.toString().toLowerCase().contains(searchQuery) ||
+            admission.name.toString().toLowerCase().contains(searchQuery);
+
+        // Apply course filter
+        final matchesCourse = selectedCourse == null ||
+            selectedCourse == 'All' ||
+            admission.coursename == selectedCourse;
+
+        return matchesSearch && matchesCourse;
       }).toList();
     });
   }
@@ -65,9 +82,7 @@ class _viewadmissionsState extends State<viewadmissions> {
           padding: const EdgeInsets.all(15.0),
           child: Column(
             children: [
-              SizedBox(
-                height: 20,
-              ),
+              SizedBox(height: 20,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -88,13 +103,48 @@ class _viewadmissionsState extends State<viewadmissions> {
                             color: Colors.black),
                       );
                     } else {
-                      return Text(
-                        "${courses.alladmisonlist.length}",
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.black),
-                      );
+                      return 
+                      
+                    Row(
+  mainAxisSize: MainAxisSize.min, // Keep Row as small as possible
+  children: [
+    IntrinsicWidth(
+      child: DropdownButton<String>(
+        value: selectedCourse ?? 'All',
+        underline: Container(), // No underline
+        isDense: true, // Minimize padding
+        isExpanded: false, // Prevent stretching to full width
+        icon: Icon(Icons.arrow_drop_down, color: Colors.black),
+        alignment: AlignmentDirectional.centerEnd, // Align dropdown content to the right
+        items: courseList.map((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(
+              value,
+              style: TextStyle(fontSize: 14),
+              overflow: TextOverflow.ellipsis, // Handle long text
+            ),
+          );
+        }).toList(),
+        onChanged: (newValue) {
+          setState(() {
+            selectedCourse = newValue;
+            filterAdmissions();
+          });
+        },
+      ),
+    ),
+    SizedBox(width: 10),
+    Text(
+      "${serchcontroller.text.isEmpty && (selectedCourse == null || selectedCourse == 'All') ? courses.alladmisonlist.length : filteredAdmissions.length}",
+      style: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w700,
+        color: Colors.black,
+      ),
+    ),
+  ],
+);
                     }
                   }),
                 ],
@@ -149,7 +199,7 @@ class _viewadmissionsState extends State<viewadmissions> {
                   // Removed phone-specific decorations
                 ),
                 onChanged: (value) {
-                    filterAdmissions(value); // Call filter function on text change
+                  filterAdmissions(); // Call filter function on text change
                   // Handle text changes here
                   // fullPhoneNumber = value; // Remove phone-specific handling
                 },
@@ -163,22 +213,26 @@ class _viewadmissionsState extends State<viewadmissions> {
                     child: CircularProgressIndicator(),
                   );
                 } else {
-                     final displayList = serchcontroller.text.isEmpty
-                        ? courses.alladmisonlist
-                        : filteredAdmissions;
+                  final displayList = (serchcontroller.text.isEmpty &&
+                          (selectedCourse == null || selectedCourse == 'All'))
+                      ? courses.alladmisonlist
+                      : filteredAdmissions;
                   return displayList.length == 0
-                        ? Center(
-                            child: Text(
-                            serchcontroller.text.isEmpty
-                                ? "No admissions"
-                                : "No matching admissions found",
-                            style: const TextStyle(fontSize: 15, color: Colors.black),
-                          ))
+                      ? Center(
+                          child: Text(
+                          serchcontroller.text.isEmpty &&
+                                  (selectedCourse == null ||
+                                      selectedCourse == 'All')
+                              ? "No admissions"
+                              : "No matching admissions found",
+                          style: const TextStyle(
+                              fontSize: 15, color: Colors.black),
+                        ))
                       : Column(
                           children: List.generate(
                             displayList.length,
                             (index) {
-                              final coursedata =displayList[index];
+                              final coursedata = displayList[index];
                               bool isActive = coursedata.admisionstauts == 1;
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -222,13 +276,11 @@ class _viewadmissionsState extends State<viewadmissions> {
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   Transform.scale(
-                                                    scale: 0.5, //
+                                                    scale: 0.8, //
                                                     child: Switch(
                                                       value: isActive,
                                                       onChanged:
                                                           (bool value) async {
-
-                      
                                                         await _showConfirmationDialog(
                                                           context,
                                                           coursedata
