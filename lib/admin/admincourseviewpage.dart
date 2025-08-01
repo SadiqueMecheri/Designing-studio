@@ -76,343 +76,346 @@ class _HomeScreenState extends State<AdminCourseView> {
   @override
   Widget build(BuildContext context) {
     vm = Provider.of<CommonViewModel>(context);
-    return Scaffold(
-      backgroundColor: Color(0xffff8f9fe),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  // height: 100,
-                  width: MediaQuery.of(context).size.width,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 20, right: 20, top: 15, bottom: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Continue \nLearning",
-                          style: TextStyle(
-                              letterSpacing: 0,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Image.asset(
-                          "assets/images/play.png",
-                          height: 80,
-                          width: 80,
-                        )
-                      ],
-                    ),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Color(0xffff8f9fe),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 20,
                   ),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: primaycolor),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Courses",
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black),
+                  Container(
+                    // height: 100,
+                    width: MediaQuery.of(context).size.width,
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 20, right: 20, top: 15, bottom: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Continue \nLearning",
+                            style: TextStyle(
+                                letterSpacing: 0,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Image.asset(
+                            "assets/images/play.png",
+                            height: 80,
+                            width: 80,
+                          )
+                        ],
+                      ),
                     ),
-                    Consumer<CommonViewModel>(
-                        builder: (context, courses, child) {
-                      if (courses.fetchallcourseloading == true) {
-                        return Text(
-                          "Loading",
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.normal,
-                              color: Colors.black),
-                        );
-                      } else {
-                        return Text(
-                          "${courses.allcourselist.length}",
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.black),
-                        );
-                      }
-                    }),
-                  ],
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Consumer<CommonViewModel>(builder: (context, courses, child) {
-                  if (courses.fetchallcourseloading == true) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else {
-                    return courses.allcourselist.length == 0
-                        ? const Center(
-                            child: Text(
-                            "No course Available",
-                            style: TextStyle(fontSize: 15, color: Colors.black),
-                          ))
-                        : StaggeredGrid.count(
-                            crossAxisCount: 2,
-                            mainAxisSpacing: 10,
-                            crossAxisSpacing: 10,
-                            children: List.generate(
-                              courses.allcourselist.length,
-                              (index) {
-                                final coursedata = courses.allcourselist[index];
-                                bool isActive = coursedata.isactive == 1;
-                                return InkWell(
-                                  onTap: () {
-                                    Navigator.push(context, MaterialPageRoute(
-                                      builder: (context) {
-                                        return SubjectScreenAdmin(
-                                          courseid: coursedata.id!,
-                                          coursename: coursedata.coursename!,
-                                        );
-                                      },
-                                    ));
-                                  },
-                                  child: Card(
-                                    color: Colors.white,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Column(
-                                        children: [
-                                          // ClipRRect(
-                                          //   borderRadius:
-                                          //       BorderRadius.circular(15),
-                                          //   child: FadeInImage.assetNetwork(
-                                          //     placeholder:
-                                          //         'assets/images/gif.gif', // Your GIF file in assets
-                                          //     image: coursedata.courseimage
-                                          //         .toString(),
-                                          //     fit: BoxFit.cover,
-                                          //   ),
-                                          // ),
-                                          ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                            child: CachedNetworkImage(
-                                              imageUrl: coursedata.courseimage
-                                                  .toString(),
-                                              placeholder: (context, url) =>
-                                                  Image.asset(
-                                                      'assets/images/gif.gif',
-                                                      fit: BoxFit.cover),
-                                              fadeInDuration: Duration(
-                                                  milliseconds:
-                                                      300), // Optional fade-in effect
-                                              fit: BoxFit.cover,
-                                              errorWidget:
-                                                  (context, url, error) =>
-                                                      Icon(Icons.error),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: primaycolor),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Courses",
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
+                      ),
+                      Consumer<CommonViewModel>(
+                          builder: (context, courses, child) {
+                        if (courses.fetchallcourseloading == true) {
+                          return Text(
+                            "Loading",
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.normal,
+                                color: Colors.black),
+                          );
+                        } else {
+                          return Text(
+                            "${courses.allcourselist.length}",
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.black),
+                          );
+                        }
+                      }),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Consumer<CommonViewModel>(builder: (context, courses, child) {
+                    if (courses.fetchallcourseloading == true) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else {
+                      return courses.allcourselist.length == 0
+                          ? const Center(
+                              child: Text(
+                              "No course Available",
+                              style:
+                                  TextStyle(fontSize: 15, color: Colors.black),
+                            ))
+                          : StaggeredGrid.count(
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 10,
+                              crossAxisSpacing: 10,
+                              children: List.generate(
+                                courses.allcourselist.length,
+                                (index) {
+                                  final coursedata =
+                                      courses.allcourselist[index];
+                                  bool isActive = coursedata.isactive == 1;
+                                  return InkWell(
+                                    onTap: () {
+                                      Navigator.push(context, MaterialPageRoute(
+                                        builder: (context) {
+                                          return SubjectScreenAdmin(
+                                            courseid: coursedata.id!,
+                                            coursename: coursedata.coursename!,
+                                          );
+                                        },
+                                      ));
+                                    },
+                                    child: Card(
+                                      color: Colors.white,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Column(
+                                          children: [
+                                            // ClipRRect(
+                                            //   borderRadius:
+                                            //       BorderRadius.circular(15),
+                                            //   child: FadeInImage.assetNetwork(
+                                            //     placeholder:
+                                            //         'assets/images/gif.gif', // Your GIF file in assets
+                                            //     image: coursedata.courseimage
+                                            //         .toString(),
+                                            //     fit: BoxFit.cover,
+                                            //   ),
+                                            // ),
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                              child: CachedNetworkImage(
+                                                imageUrl: coursedata.courseimage
+                                                    .toString(),
+                                                placeholder: (context, url) =>
+                                                    Image.asset(
+                                                        'assets/images/gif.gif',
+                                                        fit: BoxFit.cover),
+                                                fadeInDuration: Duration(
+                                                    milliseconds:
+                                                        300), // Optional fade-in effect
+                                                fit: BoxFit.cover,
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        Icon(Icons.error),
+                                              ),
                                             ),
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text(
-                                            coursedata.coursename.toString(),
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: const TextStyle(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black),
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            coursedata.description.toString(),
-                                            maxLines: 3,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: const TextStyle(
-                                                fontSize: 10,
-                                                height: 1,
-                                                fontWeight: FontWeight.normal,
-                                                color: Colors.grey),
-                                          ),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text(
+                                              coursedata.coursename.toString(),
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black),
+                                            ),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                              coursedata.description.toString(),
+                                              maxLines: 3,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  fontSize: 10,
+                                                  height: 1,
+                                                  fontWeight: FontWeight.normal,
+                                                  color: Colors.grey),
+                                            ),
 
-                                          Row(
-                                            children: [
-                                              GestureDetector(
-                                                onTap: () {
-                                                  Navigator.push(context,
-                                                      MaterialPageRoute(
-                                                    builder: (context) {
-                                                      return AddCourse(
-                                                          coursedata:
-                                                              coursedata,
-                                                          from: 1);
-                                                    },
-                                                  ));
-                                                },
-                                                child: Container(
-                                                  width: 20,
-                                                  height: 20,
-                                                  decoration: BoxDecoration(
-                                                    color: primaycolor,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20), // Half of width/height for perfect circle
-                                                  ),
-                                                  child: const Icon(
-                                                    Icons.edit,
-                                                    size: 14,
-                                                    color: Colors
-                                                        .black, // You can change the icon color
+                                            Row(
+                                              children: [
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    Navigator.push(context,
+                                                        MaterialPageRoute(
+                                                      builder: (context) {
+                                                        return AddCourse(
+                                                            coursedata:
+                                                                coursedata,
+                                                            from: 1);
+                                                      },
+                                                    ));
+                                                  },
+                                                  child: Container(
+                                                    width: 35,
+                                                    height: 35,
+                                                    decoration: BoxDecoration(
+                                                      color: primaycolor,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20), // Half of width/height for perfect circle
+                                                    ),
+                                                    child: const Icon(
+                                                      Icons.edit,
+                                                      size: 20,
+                                                      color: Colors
+                                                          .black, // You can change the icon color
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                              SizedBox(
-                                                width: 5,
-                                              ),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  showDialog(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return CupertinoAlertDialog(
-                                                        title: const Text(
-                                                            "Confirm Delete"),
-                                                        content: const Text(
-                                                            "Are you sure you want to delete this item?"),
-                                                        actions: [
-                                                          TextButton(
-                                                            onPressed: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop(); // Close the dialog
-                                                            },
-                                                            child: const Text(
-                                                                "Cancel"),
-                                                          ),
-                                                          TextButton(
-                                                            onPressed:
-                                                                () async {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
+                                                SizedBox(
+                                                  width: 10,
+                                                ),
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        return CupertinoAlertDialog(
+                                                          title: const Text(
+                                                              "Confirm Delete"),
+                                                          content: const Text(
+                                                              "Are you sure you want to delete this item?"),
+                                                          actions: [
+                                                            TextButton(
+                                                              onPressed: () {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop(); // Close the dialog
+                                                              },
+                                                              child: const Text(
+                                                                  "Cancel"),
+                                                            ),
+                                                            TextButton(
+                                                              onPressed:
+                                                                  () async {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
 
-                                                       
-                                                              await _deleteItem(
-                                                                  coursedata
-                                                                      .id!); // Call your API function
-                                                            },
-                                                            child: const Text(
-                                                                "Delete"),
-                                                          ),
-                                                        ],
-                                                      );
-                                                    },
-                                                  );
-                                                },
-                                                child: Container(
-                                                  width: 20,
-                                                  height: 20,
-                                                  decoration: BoxDecoration(
-                                                    color: primaycolor,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20), // Half of width/height for perfect circle
-                                                  ),
-                                                  child: const Icon(
-                                                    Icons.delete,
-                                                    size: 14,
-                                                    color: Colors
-                                                        .black, // You can change the icon color
+                                                                await _deleteItem(
+                                                                    coursedata
+                                                                        .id!); // Call your API function
+                                                              },
+                                                              child: const Text(
+                                                                  "Delete"),
+                                                            ),
+                                                          ],
+                                                        );
+                                                      },
+                                                    );
+                                                  },
+                                                  child: Container(
+                                                    width: 35,
+                                                    height: 35,
+                                                    decoration: BoxDecoration(
+                                                      color: primaycolor,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20), // Half of width/height for perfect circle
+                                                    ),
+                                                    child: const Icon(
+                                                      Icons.delete,
+                                                      size: 20,
+                                                      color: Colors
+                                                          .black, // You can change the icon color
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                              Spacer(),
-                                              Align(
-                                                alignment:
-                                                    Alignment.bottomRight,
-                                                child: Transform.scale(
-                                                  scale: 0.5, //
-                                                  child: Switch(
-                                                    value: isActive,
-                                                    onChanged:
-                                                        (bool value) async {
-                                                   
-                                                      await _showConfirmationDialog(
-                                                        context,
-                                                        coursedata.isactive!,
-                                                        (confirmedValue) {
-                                                          if (confirmedValue !=
-                                                              null) {
-                                                            // Call your API to update the status here
-                                                            vm!.updatecoursestatus(
-                                                                confirmedValue
-                                                                    ? 1
-                                                                    : 0,
-                                                                coursedata.id!);
-                                                            setState(() {
-                                                              coursedata
-                                                                      .isactive =
+                                                Spacer(),
+                                                Align(
+                                                  alignment:
+                                                      Alignment.bottomRight,
+                                                  child: Transform.scale(
+                                                    scale: 0.8, //
+                                                    child: Switch(
+                                                      value: isActive,
+                                                      onChanged:
+                                                          (bool value) async {
+                                                        await _showConfirmationDialog(
+                                                          context,
+                                                          coursedata.isactive!,
+                                                          (confirmedValue) {
+                                                            if (confirmedValue !=
+                                                                null) {
+                                                              // Call your API to update the status here
+                                                              vm!.updatecoursestatus(
                                                                   confirmedValue
                                                                       ? 1
-                                                                      : 0;
-                                                            });
-                                                          }
-                                                        },
-                                                      );
-                                                    },
-                                                    activeColor: Colors.green,
-                                                    activeTrackColor:
-                                                        Colors.green[200],
-                                                    inactiveThumbColor:
-                                                        Colors.grey,
-                                                    inactiveTrackColor:
-                                                        Colors.grey[300],
+                                                                      : 0,
+                                                                  coursedata
+                                                                      .id!);
+                                                              setState(() {
+                                                                coursedata
+                                                                        .isactive =
+                                                                    confirmedValue
+                                                                        ? 1
+                                                                        : 0;
+                                                              });
+                                                            }
+                                                          },
+                                                        );
+                                                      },
+                                                      activeColor: Colors.green,
+                                                      activeTrackColor:
+                                                          Colors.green[200],
+                                                      inactiveThumbColor:
+                                                          Colors.grey,
+                                                      inactiveTrackColor:
+                                                          Colors.grey[300],
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                            ],
-                                          )
-                                        ],
+                                              ],
+                                            )
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                );
-                              },
-                            ));
-                  }
-                })
-              ],
+                                  );
+                                },
+                              ));
+                    }
+                  })
+                ],
+              ),
             ),
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: primaycolor,
-        onPressed: () {
-          // Action to perform when button is pressed
-          Navigator.push(context, MaterialPageRoute(
-            builder: (context) {
-              return AddCourse(coursedata: null, from: 0);
-            },
-          ));
-          print('FAB pressed!');
-        },
-        child: Icon(Icons.add), // Icon for the button
-        tooltip: 'Add', // Text shown when long pressed
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: primaycolor,
+          onPressed: () {
+            // Action to perform when button is pressed
+            Navigator.push(context, MaterialPageRoute(
+              builder: (context) {
+                return AddCourse(coursedata: null, from: 0);
+              },
+            ));
+            print('FAB pressed!');
+          },
+          child: Icon(Icons.add), // Icon for the button
+          tooltip: 'Add', // Text shown when long pressed
+        ),
       ),
     );
   }

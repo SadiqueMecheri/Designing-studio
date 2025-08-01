@@ -194,7 +194,7 @@ class _CourseScreenState extends State<SubjectScreenAdmin> {
                                                           MainAxisSize.min,
                                                       children: [
                                                         Transform.scale(
-                                                          scale: 0.5, //
+                                                          scale: 0.8, //
                                                           child: Switch(
                                                             value: isActive,
                                                             onChanged: (bool
@@ -255,8 +255,8 @@ class _CourseScreenState extends State<SubjectScreenAdmin> {
                                                             ));
                                                           },
                                                           child: Container(
-                                                            width: 20,
-                                                            height: 20,
+                                                            width: 35,
+                                                            height: 35,
                                                             decoration:
                                                                 BoxDecoration(
                                                               color:
@@ -268,14 +268,14 @@ class _CourseScreenState extends State<SubjectScreenAdmin> {
                                                             ),
                                                             child: const Icon(
                                                               Icons.edit,
-                                                              size: 14,
+                                                              size: 20,
                                                               color: Colors
                                                                   .black, // You can change the icon color
                                                             ),
                                                           ),
                                                         ),
                                                         SizedBox(
-                                                          width: 5,
+                                                          width: 10,
                                                         ),
                                                         GestureDetector(
                                                           onTap: () {
@@ -317,8 +317,8 @@ class _CourseScreenState extends State<SubjectScreenAdmin> {
                                                             );
                                                           },
                                                           child: Container(
-                                                            width: 20,
-                                                            height: 20,
+                                                            width: 35,
+                                                            height: 35,
                                                             decoration:
                                                                 BoxDecoration(
                                                               color:
@@ -330,7 +330,7 @@ class _CourseScreenState extends State<SubjectScreenAdmin> {
                                                             ),
                                                             child: const Icon(
                                                               Icons.delete,
-                                                              size: 14,
+                                                              size: 20,
                                                               color: Colors
                                                                   .black, // You can change the icon color
                                                             ),

@@ -218,7 +218,22 @@ class _CourseScreenState extends State<SubjectScreen> {
                                                       color: Colors.black),
                                                 ),
                                                 trailing: IconButton(
-                                                    onPressed: () {},
+                                                    onPressed: () {
+
+                                                         Navigator.push(context,
+                                                MaterialPageRoute(
+                                              builder: (context) {
+                                                return ytplayer(
+                                                  videolink: coursedata.ytlink!,
+                                                  videoTitle: coursedata.title!,
+                                                 videoDescription:
+                                                    coursedata.description!,
+                                                  // youtubeurl: coursedata.ytlink!,
+                                                );
+                                              },
+                                            ));
+                
+                                                    },
                                                     icon: Icon(
                                                       Icons.play_circle,
                                                       size: 30,
