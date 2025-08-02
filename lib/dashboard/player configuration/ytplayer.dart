@@ -125,7 +125,7 @@ class _ytplayerState extends State<ytplayer> {
                 children: [
                   MediaQuery.of(context).orientation == Orientation.portrait
                       ? Container(
-                          height: MediaQuery.of(context).size.height-200,
+                          height: MediaQuery.of(context).size.height/1.5,
                           width: MediaQuery.of(context).size.width,
                           color: Colors.black,
                           child: player,
