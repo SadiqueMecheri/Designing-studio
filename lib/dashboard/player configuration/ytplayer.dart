@@ -125,10 +125,10 @@ class _ytplayerState extends State<ytplayer> {
                 children: [
                   MediaQuery.of(context).orientation == Orientation.portrait
                       ? Container(
-                          height: MediaQuery.of(context).size.width * 0.8,
+                          height: MediaQuery.of(context).size.height-200,
                           width: MediaQuery.of(context).size.width,
                           color: Colors.black,
-                          child: FittedBox(child: player),
+                          child: player,
                         )
                       : Expanded(child: player),
 
@@ -139,6 +139,8 @@ class _ytplayerState extends State<ytplayer> {
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
                               widget.videoTitle,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
                               style: const TextStyle(
                                 fontWeight: FontWeight.normal,
                                 color: Colors.black,
