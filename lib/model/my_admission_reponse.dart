@@ -38,6 +38,9 @@ class MyAdmRe {
     String? coursename;
     int? admisionstauts;
 
+        int? admisoncourseid;
+            int? admisionbathcid;
+
     MyAdmRe({
         this.id,
         this.mobileNo,
@@ -47,6 +50,9 @@ class MyAdmRe {
         this.admisonid,
         this.coursename,
         this.admisionstauts,
+
+            this.admisoncourseid,
+        this.admisionbathcid,
     });
 
     factory MyAdmRe.fromJson(Map<String, dynamic> json) => MyAdmRe(
@@ -58,6 +64,9 @@ class MyAdmRe {
         admisonid: json["admisonid"],
         coursename: json["coursename"],
         admisionstauts: json["admisionstauts"],
+
+          admisoncourseid: json["admisoncourseid"],
+        admisionbathcid: json["admisionbathcid"],
     );
 
     Map<String, dynamic> toJson() => {

@@ -292,6 +292,54 @@ class Webservice {
     return result3;
   }
 
+
+
+ Future<Map<String, dynamic>> editadmission(
+    String mobile_no,
+    String name,
+    int courseid,
+    int batchid,
+    int id,
+  ) async {
+    var result3;
+
+    Map<String, dynamic> data = {
+      'mobile_no': mobile_no,
+      'name': name,
+      "courseid": courseid,
+      "batchid": batchid,
+           "id": id,
+    };
+
+    final response = await http.post(
+      Uri.parse("${baseurl}editadmission"),
+      body: jsonEncode(data),
+      headers: {
+        'Content-type': 'application/json',
+      },
+    );
+
+    log("respons registration===${response.body}");
+    final responseData = json.decode(response.body);
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = jsonDecode(response.body);
+      CheckLogResp authUser = CheckLogResp.fromJson(responseData);
+
+      result3 = {
+        'status': true,
+        'message': 'successful',
+        'responsedata': authUser
+      };
+    } else {
+      result3 = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return result3;
+  }
+
   Future<Map<String, dynamic>> deletecourse(
     int id,
   ) async {

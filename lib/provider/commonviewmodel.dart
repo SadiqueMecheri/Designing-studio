@@ -121,6 +121,26 @@ class CommonViewModel extends ChangeNotifier {
   }
 
 
+
+
+ Future<Map<String, dynamic>> editadmission( 
+   String mobile_no,
+    String name,
+    int courseid,
+    int batchid,
+    int id
+    
+    ) async {
+    registrationloading = true;
+    notifyListeners();
+    reg = await Webservice().editadmission( mobile_no,name,courseid,batchid,id);
+    responsedata = reg['responsedata'];
+    registrationloading = false;
+    notifyListeners();
+    return reg;
+  }
+
+
   Future<Map<String, dynamic>> deletecourse(    int id,
   ) async {
     registrationloading = true;
@@ -158,7 +178,6 @@ class CommonViewModel extends ChangeNotifier {
 
     allcourse = await Webservice().fetchallcourse(from);
     allcourselist = allcourse['allcoursedata'];
-    log("allcourselist length ====== ${allcourselist.length}");
     android = allcourse['android'];
      apple = allcourse['apple'];
     fetchallcourseloading = false;
@@ -179,7 +198,7 @@ class CommonViewModel extends ChangeNotifier {
 
     allbat = await Webservice().ftechbatch();
     batchlist = allbat['allcoursedata'];
-    log("allcourselist length ====== ${batchlist.length}");
+    log(" ${batchlist.length}");
     // from = allcourse['from'];
     //   apple = allcourse['apple'];
     fetchbatchloading = false;
@@ -201,9 +220,6 @@ class CommonViewModel extends ChangeNotifier {
 
     alladmisn = await Webservice().getalladmissions();
     alladmisonlist = alladmisn['allcoursedata'];
-    log("allcourselist length ====== ${alladmisonlist.length}");
-    // from = allcourse['from'];
-    //   apple = allcourse['apple'];
     fetchalladmissionloading = false;
     notifyListeners();
     return alladmisn;

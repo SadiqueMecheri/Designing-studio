@@ -4,7 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import '../contrains.dart';
 import '../provider/commonviewmodel.dart';
+import 'editadmission.dart';
 
 class viewadmissions extends StatefulWidget {
   const viewadmissions({super.key});
@@ -82,7 +84,9 @@ class _viewadmissionsState extends State<viewadmissions> {
           padding: const EdgeInsets.all(15.0),
           child: Column(
             children: [
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -103,48 +107,51 @@ class _viewadmissionsState extends State<viewadmissions> {
                             color: Colors.black),
                       );
                     } else {
-                      return 
-                      
-                    Row(
-  mainAxisSize: MainAxisSize.min, // Keep Row as small as possible
-  children: [
-    IntrinsicWidth(
-      child: DropdownButton<String>(
-        value: selectedCourse ?? 'All',
-        underline: Container(), // No underline
-        isDense: true, // Minimize padding
-        isExpanded: false, // Prevent stretching to full width
-        icon: Icon(Icons.arrow_drop_down, color: Colors.black),
-        alignment: AlignmentDirectional.centerEnd, // Align dropdown content to the right
-        items: courseList.map((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(
-              value,
-              style: TextStyle(fontSize: 14),
-              overflow: TextOverflow.ellipsis, // Handle long text
-            ),
-          );
-        }).toList(),
-        onChanged: (newValue) {
-          setState(() {
-            selectedCourse = newValue;
-            filterAdmissions();
-          });
-        },
-      ),
-    ),
-    SizedBox(width: 10),
-    Text(
-      "${serchcontroller.text.isEmpty && (selectedCourse == null || selectedCourse == 'All') ? courses.alladmisonlist.length : filteredAdmissions.length}",
-      style: TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.w700,
-        color: Colors.black,
-      ),
-    ),
-  ],
-);
+                      return Row(
+                        mainAxisSize:
+                            MainAxisSize.min, // Keep Row as small as possible
+                        children: [
+                          IntrinsicWidth(
+                            child: DropdownButton<String>(
+                              value: selectedCourse ?? 'All',
+                              underline: Container(), // No underline
+                              isDense: true, // Minimize padding
+                              isExpanded:
+                                  false, // Prevent stretching to full width
+                              icon: Icon(Icons.arrow_drop_down,
+                                  color: Colors.black),
+                              alignment: AlignmentDirectional
+                                  .centerEnd, // Align dropdown content to the right
+                              items: courseList.map((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(
+                                    value,
+                                    style: TextStyle(fontSize: 14),
+                                    overflow: TextOverflow
+                                        .ellipsis, // Handle long text
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (newValue) {
+                                setState(() {
+                                  selectedCourse = newValue;
+                                  filterAdmissions();
+                                });
+                              },
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            "${serchcontroller.text.isEmpty && (selectedCourse == null || selectedCourse == 'All') ? courses.alladmisonlist.length : filteredAdmissions.length}",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      );
                     }
                   }),
                 ],
@@ -275,6 +282,37 @@ class _viewadmissionsState extends State<viewadmissions> {
                                               trailing: Row(
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
+
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        Navigator.push(context,
+                                                            MaterialPageRoute(
+                                                          builder: (context) {
+                                                            return editadmissions(
+                                                                coursedata:
+                                                                    coursedata,
+                                                                from: 1);
+                                                          },
+                                                        ));
+                                                      },
+                                                      child: Container(
+                                                        width: 35,
+                                                        height: 35,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: primaycolor,
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  20), // Half of width/height for perfect circle
+                                                        ),
+                                                        child: const Icon(
+                                                          Icons.edit,
+                                                          size: 20,
+                                                          color: Colors
+                                                              .black, // You can change the icon color
+                                                        ),
+                                                      ),
+                                                    ),
                                                   Transform.scale(
                                                     scale: 0.8, //
                                                     child: Switch(
