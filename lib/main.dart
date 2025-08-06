@@ -2,11 +2,15 @@ import 'package:designingstudio/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:y_player/y_player.dart';
 
 import 'provider/commonviewmodel.dart';
 
 void main() {
+
+
   WidgetsFlutterBinding.ensureInitialized();
+  YPlayerInitializer.ensureInitialized();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -21,7 +25,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-    create: (context) => CommonViewModel(),
+        create: (context) => CommonViewModel(),
         child: MaterialApp(
           title: 'Designing Studio',
           debugShowCheckedModeBanner: false,
@@ -31,7 +35,5 @@ class MyApp extends StatelessWidget {
           ),
           home: SplashScreen(),
         ));
-      }
-    
   }
-
+}

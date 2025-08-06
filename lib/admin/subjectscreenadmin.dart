@@ -5,18 +5,20 @@ import 'package:flutter/services.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import '../dashboard/player configuration/y_newplayer.dart';
 import '../dashboard/player configuration/ytplayer.dart';
 import '../dashboard/videoplayermobile.dart';
 import '../provider/commonviewmodel.dart';
 import 'addclass.dart';
 
 class SubjectScreenAdmin extends StatefulWidget {
-  final int courseid;
+  final int courseid, player;
   final String coursename;
 
   const SubjectScreenAdmin({
     super.key,
     required this.courseid,
+    required this.player,
     required this.coursename,
   });
 
@@ -340,27 +342,71 @@ class _CourseScreenState extends State<SubjectScreenAdmin> {
 
                                                         IconButton(
                                                             onPressed: () {
-                                                              Navigator.push(
-                                                                  context,
-                                                                  MaterialPageRoute(
-                                                                builder:
-                                                                    (context) {
-                                                                  return ytplayer(
-                                                                    videolink:
-                                                                        coursedata
-                                                                            .ytlink!,
-                                                                    videoTitle:
-                                                                        coursedata
-                                                                            .title!,
-                                                                    videoDescription:
-                                                                        coursedata
-                                                                            .description!,
-                                                                    // youtubeurl:
-                                                                    //     coursedata
-                                                                    //         .ytlink!,
-                                                                  );
-                                                                },
-                                                              ));
+                                                              if (widget
+                                                                      .player ==
+                                                                  0) {
+                                                                Navigator.push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) {
+                                                                    return ytplayer(
+                                                                      videolink:
+                                                                          coursedata
+                                                                              .ytlink!,
+                                                                      videoTitle:
+                                                                          coursedata
+                                                                              .title!,
+                                                                      videoDescription:
+                                                                          coursedata
+                                                                              .description!,
+                                                                    );
+                                                                  },
+                                                                ));
+                                                              } else if (widget
+                                                                      .player ==
+                                                                  1) {
+                                                                Navigator.push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) {
+                                                                    return VideoPlayerPage(
+                                                                      videoUrl:
+                                                                          coursedata
+                                                                              .ytlink!,
+                                                                      videoTitle:
+                                                                          coursedata
+                                                                              .title!,
+                                                                      videoDescription:
+                                                                          coursedata
+                                                                              .description!,
+                                                                      youtubeurl:
+                                                                          coursedata
+                                                                              .ytlink!,
+                                                                    );
+                                                                  },
+                                                                ));
+                                                              } else {
+                                                                Navigator.push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) {
+                                                                    return ynewplayerwithqulaity(
+                                                                      videolink:
+                                                                          coursedata
+                                                                              .ytlink!,
+                                                                      videoTitle:
+                                                                          coursedata
+                                                                              .title!,
+                                                                      videoDescription:
+                                                                          coursedata
+                                                                              .description!,
+                                                                    );
+                                                                  },
+                                                                ));
+                                                              }
                                                             },
                                                             icon: Icon(
                                                               Icons.play_circle,

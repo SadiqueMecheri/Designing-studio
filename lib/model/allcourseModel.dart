@@ -13,17 +13,20 @@ class Courseresponse {
     List<CourseMMOdel>? message;
      int? apple;
       int? android;
+          int? player;
 
     Courseresponse({
         this.success,
         this.message,
              this.apple,
         this.android,
+             this.player,
     });
 
     factory Courseresponse.fromJson(Map<String, dynamic> json) => Courseresponse(
         success: json["success"],
           apple: json["apple"],
+            player: json["player"],
               android: json["android"],
         message: json["message"] == null ? [] : List<CourseMMOdel>.from(json["message"]!.map((x) => CourseMMOdel.fromJson(x))),
     );

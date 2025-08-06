@@ -12,7 +12,6 @@ import '../model/responsemodel.dart';
 import '../webservice/webservice.dart';
 
 class CommonViewModel extends ChangeNotifier {
- 
 //registration
   late Map<String, dynamic> reg;
   bool registrationloading = false;
@@ -21,145 +20,120 @@ class CommonViewModel extends ChangeNotifier {
   Future<Map<String, dynamic>> checklogin(String phonenumber) async {
     registrationloading = true;
     notifyListeners();
-    reg = await Webservice().checklogin( phonenumber);
+    reg = await Webservice().checklogin(phonenumber);
     responsedata = reg['responsedata'];
     registrationloading = false;
     notifyListeners();
     return reg;
   }
 
-
-
-    Future<Map<String, dynamic>> registration(String phonenumber,String name) async {
+  Future<Map<String, dynamic>> registration(
+      String phonenumber, String name) async {
     registrationloading = true;
     notifyListeners();
-    reg = await Webservice().registration( phonenumber,name);
+    reg = await Webservice().registration(phonenumber, name);
     responsedata = reg['responsedata'];
     registrationloading = false;
     notifyListeners();
     return reg;
   }
 
-
-
-  Future<Map<String, dynamic>> addcourse(    String coursename,
-    String description,
-    String image,
-    String price,
-    String note,
-    int from, int? id
-    
-    ) async {
+  Future<Map<String, dynamic>> addcourse(String coursename, String description,
+      String image, String price, String note, int from, int? id) async {
     registrationloading = true;
     notifyListeners();
-    reg = await Webservice().addcourse( coursename,description,image,price,note,from,id);
+    reg = await Webservice()
+        .addcourse(coursename, description, image, price, note, from, id);
     responsedata = reg['responsedata'];
     registrationloading = false;
     notifyListeners();
     return reg;
   }
 
-
-
-
- Future<Map<String, dynamic>> addclass( 
-   String title,
-    String description,
-    String ytlink,
-    String thumburl,
-   int courseid,
-   int seqnceno,
-     int from, int? id
-    
-    ) async {
+  Future<Map<String, dynamic>> addclass(
+      String title,
+      String description,
+      String ytlink,
+      String thumburl,
+      int courseid,
+      int seqnceno,
+      int from,
+      int? id) async {
     registrationloading = true;
     notifyListeners();
-    reg = await Webservice().addclass( title,description,ytlink,thumburl,courseid,seqnceno,from,id);
+    reg = await Webservice().addclass(
+        title, description, ytlink, thumburl, courseid, seqnceno, from, id);
     responsedata = reg['responsedata'];
     registrationloading = false;
     notifyListeners();
     return reg;
   }
 
-
-
-
-
-
- Future<Map<String, dynamic>> addbatch( 
- String batchname, int courseid,
-      String startdate, int from, int? id
-    
-    ) async {
+  Future<Map<String, dynamic>> addbatch(String batchname, int courseid,
+      String startdate, int from, int? id) async {
     registrationloading = true;
     notifyListeners();
-    reg = await Webservice().addbatch( batchname,courseid,startdate,from,id);
+    reg = await Webservice().addbatch(batchname, courseid, startdate, from, id);
     responsedata = reg['responsedata'];
     registrationloading = false;
     notifyListeners();
     return reg;
   }
 
-
-
-
-
- Future<Map<String, dynamic>> addadmission( 
-   String mobile_no,
+  Future<Map<String, dynamic>> addadmission(
+    String mobile_no,
     String name,
     int courseid,
     int batchid,
-    
-    ) async {
-    registrationloading = true;
-    notifyListeners();
-    reg = await Webservice().addadmission( mobile_no,name,courseid,batchid,);
-    responsedata = reg['responsedata'];
-    registrationloading = false;
-    notifyListeners();
-    return reg;
-  }
-
-
-
-
- Future<Map<String, dynamic>> editadmission( 
-   String mobile_no,
-    String name,
-    int courseid,
-    int batchid,
-    int id
-    
-    ) async {
-    registrationloading = true;
-    notifyListeners();
-    reg = await Webservice().editadmission( mobile_no,name,courseid,batchid,id);
-    responsedata = reg['responsedata'];
-    registrationloading = false;
-    notifyListeners();
-    return reg;
-  }
-
-
-  Future<Map<String, dynamic>> deletecourse(    int id,
   ) async {
     registrationloading = true;
     notifyListeners();
-    reg = await Webservice().deletecourse( id,);
+    reg = await Webservice().addadmission(
+      mobile_no,
+      name,
+      courseid,
+      batchid,
+    );
     responsedata = reg['responsedata'];
     registrationloading = false;
     notifyListeners();
     return reg;
   }
 
+  Future<Map<String, dynamic>> editadmission(
+      String mobile_no, String name, int courseid, int batchid, int id) async {
+    registrationloading = true;
+    notifyListeners();
+    reg = await Webservice()
+        .editadmission(mobile_no, name, courseid, batchid, id);
+    responsedata = reg['responsedata'];
+    registrationloading = false;
+    notifyListeners();
+    return reg;
+  }
 
-
-
- Future<Map<String, dynamic>> deleteclass(    int id,
+  Future<Map<String, dynamic>> deletecourse(
+    int id,
   ) async {
     registrationloading = true;
     notifyListeners();
-    reg = await Webservice().deleteclass( id,);
+    reg = await Webservice().deletecourse(
+      id,
+    );
+    responsedata = reg['responsedata'];
+    registrationloading = false;
+    notifyListeners();
+    return reg;
+  }
+
+  Future<Map<String, dynamic>> deleteclass(
+    int id,
+  ) async {
+    registrationloading = true;
+    notifyListeners();
+    reg = await Webservice().deleteclass(
+      id,
+    );
     responsedata = reg['responsedata'];
     registrationloading = false;
     notifyListeners();
@@ -172,28 +146,29 @@ class CommonViewModel extends ChangeNotifier {
 
   late List<CourseMMOdel> allcourselist;
   int? android;
-   int? apple;
+  int? apple;
+
+  int? playerin;
+
   Future<Map<String, dynamic>> fetchallcourse(int from) async {
     fetchallcourseloading = true;
 
     allcourse = await Webservice().fetchallcourse(from);
     allcourselist = allcourse['allcoursedata'];
     android = allcourse['android'];
-     apple = allcourse['apple'];
+    apple = allcourse['apple'];
+     playerin = allcourse['player'];
     fetchallcourseloading = false;
     notifyListeners();
     return allcourse;
   }
-
-
 
   late Map<String, dynamic> allbat;
   bool fetchbatchloading = false;
 
   late List<BathcResp> batchlist;
 
-
- Future<Map<String, dynamic>> ftechbatch() async {
+  Future<Map<String, dynamic>> ftechbatch() async {
     fetchbatchloading = true;
 
     allbat = await Webservice().ftechbatch();
@@ -206,15 +181,12 @@ class CommonViewModel extends ChangeNotifier {
     return allbat;
   }
 
-
-
-
-   // //fetchallcourse
+  // //fetchallcourse
   late Map<String, dynamic> alladmisn;
   bool fetchalladmissionloading = false;
 
   late List<MyAdmRe> alladmisonlist;
-  
+
   Future<Map<String, dynamic>> getalladmissions() async {
     fetchalladmissionloading = true;
 
@@ -230,59 +202,53 @@ class CommonViewModel extends ChangeNotifier {
   bool fetchmycourseloading = false;
 
   late List<CourseMMOdel> mycourselist;
+  int? player;
   Future<Map<String, dynamic>> fetchmycourse() async {
     fetchmycourseloading = true;
 
     mycourse = await Webservice().fetchmycourse();
     mycourselist = mycourse['allcoursedata'];
+    player = mycourse['player'];
     //log("mycourselist length ====== ${mycourselist.length}");
     fetchmycourseloading = false;
     notifyListeners();
     return mycourse;
   }
 
-
-
-
-    Future<Map<String, dynamic>> updatecoursestatus(int status,int id) async {
+  Future<Map<String, dynamic>> updatecoursestatus(int status, int id) async {
     registrationloading = true;
     notifyListeners();
-    reg = await Webservice().updatecoursestatus( status,id);
+    reg = await Webservice().updatecoursestatus(status, id);
     responsedata = reg['responsedata'];
     registrationloading = false;
     notifyListeners();
     return reg;
   }
 
-
-   Future<Map<String, dynamic>> updateclassstatus(int status,int id) async {
+  Future<Map<String, dynamic>> updateclassstatus(int status, int id) async {
     registrationloading = true;
     notifyListeners();
-    reg = await Webservice().updateclassstatus( status,id);
+    reg = await Webservice().updateclassstatus(status, id);
     responsedata = reg['responsedata'];
     registrationloading = false;
     notifyListeners();
     return reg;
   }
 
-
-
-     Future<Map<String, dynamic>> updatestude(int status,int id) async {
+  Future<Map<String, dynamic>> updatestude(int status, int id) async {
     registrationloading = true;
     notifyListeners();
-    reg = await Webservice().updatestude( status,id);
+    reg = await Webservice().updatestude(status, id);
     responsedata = reg['responsedata'];
     registrationloading = false;
     notifyListeners();
     return reg;
   }
 
-
-
-   Future<Map<String, dynamic>> updatebatchstaus(int status,int id) async {
+  Future<Map<String, dynamic>> updatebatchstaus(int status, int id) async {
     registrationloading = true;
     notifyListeners();
-    reg = await Webservice().updatebatchstaus( status,id);
+    reg = await Webservice().updatebatchstaus(status, id);
     responsedata = reg['responsedata'];
     registrationloading = false;
     notifyListeners();
@@ -309,9 +275,6 @@ class CommonViewModel extends ChangeNotifier {
   // //   super.dispose();
   // // }
 
-
-
-
   //   //fetchmycourse
   // late Map<String, dynamic> mysubj;
   // bool fetchmysubjonlyloading = false;
@@ -328,17 +291,16 @@ class CommonViewModel extends ChangeNotifier {
   //   return mysubj;
   // }
 
-
-
   //  //fetchmycourse
   late Map<String, dynamic> myuni;
   bool fetchmyunionlyloading = false;
 
   late List<UnitRe> myunitonlylist;
-  Future<Map<String, dynamic>> fetchmyunitonly(int courseid,int batchid) async {
+  Future<Map<String, dynamic>> fetchmyunitonly(
+      int courseid, int batchid) async {
     fetchmyunionlyloading = true;
 
-    myuni = await Webservice().fetchmyunitonly(courseid,batchid);
+    myuni = await Webservice().fetchmyunitonly(courseid, batchid);
     myunitonlylist = myuni['allcoursedata'];
     log("mycourselist length ====== ${myunitonlylist.length}");
     fetchmyunionlyloading = false;
@@ -346,9 +308,7 @@ class CommonViewModel extends ChangeNotifier {
     return myuni;
   }
 
-
-
- late Map<String, dynamic> myuniadm;
+  late Map<String, dynamic> myuniadm;
   bool fetchmyunionlyloadingadmin = false;
 
   late List<UnitRe> myunitonlylistadmin;
@@ -363,12 +323,11 @@ class CommonViewModel extends ChangeNotifier {
     return myuniadm;
   }
 
-
-
-    Future<Map<String, dynamic>> adminlogin(String username,String password) async {
+  Future<Map<String, dynamic>> adminlogin(
+      String username, String password) async {
     registrationloading = true;
     notifyListeners();
-    reg = await Webservice().adminlogin( username,password);
+    reg = await Webservice().adminlogin(username, password);
     responsedata = reg['responsedata'];
     registrationloading = false;
     notifyListeners();

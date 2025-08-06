@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.6+6
+version: 1.0.5+5
 
 environment:
   sdk: ^3.6.2
@@ -44,14 +44,20 @@ dependencies:
   url_launcher:
   cached_network_image: ^3.3.0
   intl:
+  y_player:
   # connectivity_plus: ^6.1.4
   # internet_connection_checker:
-  youtube_player_flutter: ^9.1.1
+  # youtube_player_flutter: ^9.1.0
+  # y_player:
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  youtube_player_flutter:
+    git:
+      url: https://github.com/congdanh1608/youtube_player_flutter.git
+      path: packages/youtube_player_flutter
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

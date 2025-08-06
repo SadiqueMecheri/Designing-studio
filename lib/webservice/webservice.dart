@@ -101,7 +101,7 @@ class Webservice {
 
     Map<String, dynamic> data = {
       'coursename': coursename,
-      'courseimage':image ,
+      'courseimage': image,
       "description": description,
       "price": price,
       "note": note,
@@ -292,9 +292,7 @@ class Webservice {
     return result3;
   }
 
-
-
- Future<Map<String, dynamic>> editadmission(
+  Future<Map<String, dynamic>> editadmission(
     String mobile_no,
     String name,
     int courseid,
@@ -308,7 +306,7 @@ class Webservice {
       'name': name,
       "courseid": courseid,
       "batchid": batchid,
-           "id": id,
+      "id": id,
     };
 
     final response = await http.post(
@@ -600,8 +598,10 @@ class Webservice {
         'status': true,
         'message': 'successful',
         'allcoursedata': authUser.message,
-          'android': authUser.android,
-     'apple': authUser.apple,
+        'android': authUser.android,
+        'apple': authUser.apple,
+        'player':authUser.player
+       
       };
     } else {
       result3 = {
@@ -702,6 +702,7 @@ class Webservice {
         'status': true,
         'message': 'successful',
         'allcoursedata': authUser.message,
+        'player': authUser.player,
       };
     } else {
       result3 = {

@@ -183,6 +183,7 @@ class _HomeScreenState extends State<AdminCourseView> {
                                       Navigator.push(context, MaterialPageRoute(
                                         builder: (context) {
                                           return SubjectScreenAdmin(
+                                            player:vm!.playerin!,
                                             courseid: coursedata.id!,
                                             coursename: coursedata.coursename!,
                                           );

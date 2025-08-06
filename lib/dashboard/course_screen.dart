@@ -73,6 +73,7 @@ class _CourseScreenState extends State<CourseScreen> {
                                     Navigator.push(context, MaterialPageRoute(
                                       builder: (context) {
                                         return SubjectScreen(
+                                          player:vm?.player,
                                           courseid: coursedata.id!,
                                           batchid: coursedata.batchid!,
                                           coursename: coursedata.coursename!,
